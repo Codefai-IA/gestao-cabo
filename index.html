@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Vendas - Cabo Pereira</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2e1a 0%, #2d4a2d 50%, #1a2e1a 100%);
+            min-height: 100vh;
+            color: #e8e8e8;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(180deg, #2d4a2d 0%, #1f3520 100%);
+            border-bottom: 4px solid #8b7355;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header::before,
+        .header::after {
+            content: "★";
+            font-size: 2rem;
+            color: #c4a64a;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .header::before { left: 20px; }
+        .header::after { right: 20px; }
+
+        .header h1 {
+            font-size: 2.2rem;
+            color: #c4a64a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 5px;
+        }
+
+        .header .subtitle {
+            color: #9cb89c;
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .rank-badge {
+            display: inline-block;
+            background: linear-gradient(180deg, #5c7a5c 0%, #3d5a3d 100%);
+            padding: 8px 25px;
+            border-radius: 5px;
+            margin-top: 15px;
+            border: 2px solid #8b7355;
+            font-weight: bold;
+            color: #f0e6d3;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+
+        .status-online {
+            background: #27ae60;
+            color: white;
+        }
+
+        .status-offline {
+            background: #e74c3c;
+            color: white;
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26, 46, 26, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .loading-overlay.hidden {
+            display: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #5c7a5c;
+            border-top-color: #c4a64a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #c4a64a;
+            font-size: 1.1rem;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px 25px;
+            background: linear-gradient(180deg, #2d4a2d 0%, #1f3520 100%);
+            border: 2px solid #5c7a5c;
+            border-radius: 10px;
+            color: #9cb89c;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tab-btn:hover {
+            background: linear-gradient(180deg, #3d5a3d 0%, #2d4a2d 100%);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(180deg, #8b7355 0%, #6b5a45 100%);
+            color: #f0e6d3;
+            border-color: #c4a64a;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, #3d5a3d 0%, #2d4a2d 100%);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #5c7a5c;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #8b7355, #c4a64a, #8b7355);
+        }
+
+        .stat-card .icon { font-size: 1.8rem; margin-bottom: 8px; }
+        .stat-card .value { font-size: 1.5rem; font-weight: bold; color: #c4a64a; margin-bottom: 5px; }
+        .stat-card .label { color: #9cb89c; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .stat-card.negative .value { color: #e74c3c; }
+        .stat-card.positive .value { color: #27ae60; }
+
+        /* Charts Section */
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .chart-card {
+            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
+            padding: 25px;
+            border-radius: 10px;
+            border: 2px solid #5c7a5c;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .chart-title {
+            color: #c4a64a;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #5c7a5c;
+        }
+
+        .chart-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chart-bar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-bar-label {
+            width: 100px;
+            font-size: 0.85rem;
+            color: #9cb89c;
+        }
+
+        .chart-bar-track {
+            flex: 1;
+            height: 25px;
+            background: #1a2e1a;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8b7355, #c4a64a);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            min-width: fit-content;
+        }
+
+        .chart-bar-value {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #1a2e1a;
+            white-space: nowrap;
+        }
+
+        .chart-bar-count {
+            width: 50px;
+            text-align: right;
+            font-weight: bold;
+            color: #c4a64a;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 2px solid #5c7a5c;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .form-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #5c7a5c;
+        }
+
+        .form-title h2 {
+            color: #c4a64a;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            color: #9cb89c;
+            margin-bottom: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid #5c7a5c;
+            border-radius: 8px;
+            background: #1a2e1a;
+            color: #e8e8e8;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #c4a64a;
+            box-shadow: 0 0 10px rgba(196, 166, 74, 0.3);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #6b8b6b;
+        }
+
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239cb89c' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 35px;
+        }
+
+        .form-group select option {
+            background: #1a2e1a;
+            color: #e8e8e8;
+        }
+
+        .btn-add {
+            width: 100%;
+            padding: 12px 25px;
+            background: linear-gradient(180deg, #8b7355 0%, #6b5a45 100%);
+            color: #f0e6d3;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-add:hover {
+            background: linear-gradient(180deg, #9b8365 0%, #7b6a55 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 115, 85, 0.4);
+        }
+
+        .btn-add:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Sales List */
+        .sales-section {
+            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
+            padding: 25px;
+            border-radius: 10px;
+            border: 2px solid #5c7a5c;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .sales-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #5c7a5c;
+        }
+
+        .sales-title h2 {
+            color: #c4a64a;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .sales-count {
+            background: #1a2e1a;
+            padding: 5px 12px;
+            border-radius: 20px;
+            color: #9cb89c;
+            font-size: 0.85rem;
+        }
+
+        .sales-list {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .sales-list::-webkit-scrollbar { width: 8px; }
+        .sales-list::-webkit-scrollbar-track { background: #1a2e1a; border-radius: 4px; }
+        .sales-list::-webkit-scrollbar-thumb { background: #5c7a5c; border-radius: 4px; }
+
+        .sale-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            background: linear-gradient(90deg, #2d4a2d 0%, #1f3520 100%);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 4px solid #8b7355;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .sale-item:hover {
+            transform: translateX(5px);
+            background: linear-gradient(90deg, #3d5a3d 0%, #2d4a2d 100%);
+        }
+
+        .sale-item.trafego {
+            border-left-color: #e74c3c;
+        }
+
+        .sale-info { flex: 1; }
+        .sale-name { font-weight: bold; color: #e8e8e8; font-size: 1rem; margin-bottom: 3px; }
+        .sale-plan { color: #c4a64a; font-size: 0.85rem; margin-bottom: 2px; font-weight: 500; }
+        .sale-date { color: #7a9a7a; font-size: 0.8rem; }
+        .sale-value { font-size: 1.2rem; font-weight: bold; color: #c4a64a; margin-right: 15px; }
+        .sale-value.negative { color: #e74c3c; }
+
+        .btn-remove {
+            background: linear-gradient(180deg, #8b4545 0%, #6b3535 100%);
+            color: #f0e6d3;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-remove:hover {
+            background: linear-gradient(180deg, #a55555 0%, #854545 100%);
+            transform: scale(1.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6b8b6b;
+        }
+
+        .empty-state .icon { font-size: 2.5rem; margin-bottom: 12px; }
+        .empty-state p { font-size: 1rem; }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+            max-width: 300px;
+        }
+
+        .toast.success { background: #27ae60; }
+        .toast.error { background: #e74c3c; }
+        .toast.hidden { display: none; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 25px;
+            color: #5c7a5c;
+            font-size: 0.85rem;
+        }
+
+        .footer .stars { color: #c4a64a; margin-bottom: 8px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.5rem; }
+            .header::before, .header::after { display: none; }
+            .stat-card .value { font-size: 1.2rem; }
+            .sale-item { flex-wrap: wrap; gap: 8px; }
+            .sale-value { margin-right: 0; }
+            .tabs-container { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Carregando dados...</div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast hidden" id="toast"></div>
+
+    <header class="header">
+        <h1>Cabo Pereira <span class="status-badge status-online" id="statusBadge">Online</span></h1>
+        <p class="subtitle">Sistema de Controle de Vendas</p>
+        <div class="rank-badge">★★ OPERAÇÃO VENDAS ★★</div>
+    </header>
+
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('vendas')">
+                💰 Vendas
+            </button>
+            <button class="tab-btn" onclick="switchTab('trafego')">
+                📢 Tráfego
+            </button>
+        </div>
+
+        <!-- Tab Vendas -->
+        <div id="tab-vendas" class="tab-content active">
+            <!-- Stats Cards -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="icon">💰</div>
+                    <div class="value" id="totalVendas">R$ 0,00</div>
+                    <div class="label">Total Vendas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">🎖️</div>
+                    <div class="value" id="qtdVendas">0</div>
+                    <div class="label">Alunos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">📊</div>
+                    <div class="value" id="mediaVendas">R$ 0,00</div>
+                    <div class="label">Média/Venda</div>
+                </div>
+                <div class="stat-card positive">
+                    <div class="icon">📈</div>
+                    <div class="value" id="lucroLiquido">R$ 0,00</div>
+                    <div class="label">Lucro Líquido</div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h3 class="chart-title">📊 Planos Mais Vendidos</h3>
+                    <div class="chart-bars" id="chartPlanos">
+                        <div class="empty-state">
+                            <p>Sem dados ainda</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3 class="chart-title">💵 Faturamento por Plano</h3>
+                    <div class="chart-bars" id="chartFaturamento">
+                        <div class="empty-state">
+                            <p>Sem dados ainda</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Section -->
+            <section class="form-section">
+                <div class="form-title">
+                    <h2>➕ Registrar Nova Venda</h2>
+                </div>
+                <form id="formVenda">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="nomeAluno">Nome do Aluno</label>
+                            <input type="text" id="nomeAluno" placeholder="Digite o nome do aluno" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="planoVenda">Plano</label>
+                            <select id="planoVenda" required>
+                                <option value="">Selecione o plano</option>
+                                <option value="Mensal">Mensal</option>
+                                <option value="Bimestral">Bimestral</option>
+                                <option value="Trimestral">Trimestral</option>
+                                <option value="Quadrimestral">Quadrimestral</option>
+                                <option value="Semestral">Semestral</option>
+                                <option value="Anual">Anual</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="valorVenda">Valor (R$)</label>
+                            <input type="text" id="valorVenda" placeholder="0,00" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-add" id="btnVenda">
+                        <span>⚔️</span> Adicionar Venda
+                    </button>
+                </form>
+            </section>
+
+            <!-- Sales List -->
+            <section class="sales-section">
+                <div class="sales-title">
+                    <h2>📋 Registro de Vendas</h2>
+                    <span class="sales-count" id="salesCount">0 registros</span>
+                </div>
+                <div class="sales-list" id="salesList">
+                    <div class="empty-state">
+                        <div class="icon">🎯</div>
+                        <p>Nenhuma venda registrada ainda.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Tráfego -->
+        <div id="tab-trafego" class="tab-content">
+            <!-- Stats Cards Tráfego -->
+            <div class="stats-container">
+                <div class="stat-card negative">
+                    <div class="icon">📢</div>
+                    <div class="value" id="totalTrafego">R$ 0,00</div>
+                    <div class="label">Total Gasto</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">📝</div>
+                    <div class="value" id="qtdTrafego">0</div>
+                    <div class="label">Registros</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">💰</div>
+                    <div class="value" id="totalVendasTrafego">R$ 0,00</div>
+                    <div class="label">Total Vendas</div>
+                </div>
+                <div class="stat-card positive">
+                    <div class="icon">📈</div>
+                    <div class="value" id="roiTrafego">0%</div>
+                    <div class="label">ROI</div>
+                </div>
+            </div>
+
+            <!-- Form Tráfego -->
+            <section class="form-section">
+                <div class="form-title">
+                    <h2>📢 Registrar Gasto com Tráfego</h2>
+                </div>
+                <form id="formTrafego">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="descricaoTrafego">Descrição</label>
+                            <input type="text" id="descricaoTrafego" placeholder="Ex: Facebook Ads, Google Ads..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="valorTrafego">Valor Gasto (R$)</label>
+                            <input type="text" id="valorTrafego" placeholder="0,00" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-add" id="btnTrafego">
+                        <span>📢</span> Registrar Gasto
+                    </button>
+                </form>
+            </section>
+
+            <!-- Tráfego List -->
+            <section class="sales-section">
+                <div class="sales-title">
+                    <h2>📋 Histórico de Gastos</h2>
+                    <span class="sales-count" id="trafegoCount">0 registros</span>
+                </div>
+                <div class="sales-list" id="trafegoList">
+                    <div class="empty-state">
+                        <div class="icon">📢</div>
+                        <p>Nenhum gasto registrado ainda.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer class="footer">
+            <div class="stars">★ ★ ★ ★ ★</div>
+            <p>Sistema de Gestão - Cabo Pereira</p>
+        </footer>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURAÇÃO SUPABASE
+        // ============================================
+        const SUPABASE_URL = 'https://xdjzxvndqevquvlgvwng.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhkanp4dm5kcWV2cXV2bGd2d25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzMjU3MTAsImV4cCI6MjA4NDkwMTcxMH0.LqoBAaZTdvmCprAbB61ykuJUKr9EY5R7w3vlydODfmI';
+
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // ============================================
+        // DADOS
+        // ============================================
+        let vendas = [];
+        let trafego = [];
+
+        // ============================================
+        // ELEMENTOS DOM
+        // ============================================
+        const formVenda = document.getElementById('formVenda');
+        const nomeInput = document.getElementById('nomeAluno');
+        const planoSelect = document.getElementById('planoVenda');
+        const valorInput = document.getElementById('valorVenda');
+        const salesList = document.getElementById('salesList');
+        const btnVenda = document.getElementById('btnVenda');
+
+        const formTrafego = document.getElementById('formTrafego');
+        const descricaoTrafegoInput = document.getElementById('descricaoTrafego');
+        const valorTrafegoInput = document.getElementById('valorTrafego');
+        const trafegoList = document.getElementById('trafegoList');
+        const btnTrafego = document.getElementById('btnTrafego');
+
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const toast = document.getElementById('toast');
+        const statusBadge = document.getElementById('statusBadge');
+
+        // ============================================
+        // FUNÇÕES UTILITÁRIAS
+        // ============================================
+
+        function showLoading() {
+            loadingOverlay.classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            loadingOverlay.classList.add('hidden');
+        }
+
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        function setOnlineStatus(online) {
+            statusBadge.textContent = online ? 'Online' : 'Offline';
+            statusBadge.className = `status-badge ${online ? 'status-online' : 'status-offline'}`;
+        }
+
+        // Máscara de valor com vírgula
+        function mascaraValor(input) {
+            input.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length === 0) {
+                    e.target.value = '';
+                    return;
+                }
+                value = (parseInt(value) / 100).toFixed(2);
+                e.target.value = value.replace('.', ',');
+            });
+        }
+
+        mascaraValor(valorInput);
+        mascaraValor(valorTrafegoInput);
+
+        function valorParaNumero(valorFormatado) {
+            if (!valorFormatado) return 0;
+            return parseFloat(valorFormatado.replace(/\./g, '').replace(',', '.')) || 0;
+        }
+
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function formatarDataHora(dataString) {
+            const data = new Date(dataString);
+            return data.toLocaleString('pt-BR', {
+                timeZone: 'America/Sao_Paulo',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+        }
+
+        // ============================================
+        // FUNÇÕES SUPABASE - VENDAS
+        // ============================================
+
+        async function carregarVendas() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('vendas')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                vendas = data || [];
+                setOnlineStatus(true);
+                return vendas;
+            } catch (error) {
+                console.error('Erro ao carregar vendas:', error);
+                setOnlineStatus(false);
+                showToast('Erro ao carregar vendas', 'error');
+                return [];
+            }
+        }
+
+        async function adicionarVenda(nome, plano, valor) {
+            try {
+                btnVenda.disabled = true;
+                btnVenda.innerHTML = '<span>⏳</span> Salvando...';
+
+                const { data, error } = await supabaseClient
+                    .from('vendas')
+                    .insert([{ nome, plano, valor }])
+                    .select();
+
+                if (error) throw error;
+
+                vendas.unshift(data[0]);
+                renderizarVendas();
+                showToast('Venda registrada com sucesso!');
+                return true;
+            } catch (error) {
+                console.error('Erro ao adicionar venda:', error);
+                showToast('Erro ao salvar venda', 'error');
+                return false;
+            } finally {
+                btnVenda.disabled = false;
+                btnVenda.innerHTML = '<span>⚔️</span> Adicionar Venda';
+            }
+        }
+
+        async function removerVenda(id) {
+            if (!confirm('Remover esta venda?')) return;
+
+            try {
+                const { error } = await supabaseClient
+                    .from('vendas')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                vendas = vendas.filter(v => v.id !== id);
+                renderizarVendas();
+                showToast('Venda removida!');
+            } catch (error) {
+                console.error('Erro ao remover venda:', error);
+                showToast('Erro ao remover venda', 'error');
+            }
+        }
+
+        // ============================================
+        // FUNÇÕES SUPABASE - TRÁFEGO
+        // ============================================
+
+        async function carregarTrafego() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('trafego')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                trafego = data || [];
+                return trafego;
+            } catch (error) {
+                console.error('Erro ao carregar tráfego:', error);
+                showToast('Erro ao carregar gastos', 'error');
+                return [];
+            }
+        }
+
+        async function adicionarTrafego(descricao, valor) {
+            try {
+                btnTrafego.disabled = true;
+                btnTrafego.innerHTML = '<span>⏳</span> Salvando...';
+
+                const { data, error } = await supabaseClient
+                    .from('trafego')
+                    .insert([{ descricao, valor }])
+                    .select();
+
+                if (error) throw error;
+
+                trafego.unshift(data[0]);
+                renderizarTrafego();
+                showToast('Gasto registrado com sucesso!');
+                return true;
+            } catch (error) {
+                console.error('Erro ao adicionar tráfego:', error);
+                showToast('Erro ao salvar gasto', 'error');
+                return false;
+            } finally {
+                btnTrafego.disabled = false;
+                btnTrafego.innerHTML = '<span>📢</span> Registrar Gasto';
+            }
+        }
+
+        async function removerTrafego(id) {
+            if (!confirm('Remover este gasto?')) return;
+
+            try {
+                const { error } = await supabaseClient
+                    .from('trafego')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                trafego = trafego.filter(t => t.id !== id);
+                renderizarTrafego();
+                showToast('Gasto removido!');
+            } catch (error) {
+                console.error('Erro ao remover tráfego:', error);
+                showToast('Erro ao remover gasto', 'error');
+            }
+        }
+
+        // ============================================
+        // ATUALIZAR ESTATÍSTICAS E GRÁFICOS
+        // ============================================
+
+        function atualizarEstatisticas() {
+            const totalVendas = vendas.reduce((acc, v) => acc + parseFloat(v.valor), 0);
+            const totalTrafegoVal = trafego.reduce((acc, t) => acc + parseFloat(t.valor), 0);
+            const qtdVendas = vendas.length;
+            const media = qtdVendas > 0 ? totalVendas / qtdVendas : 0;
+            const lucro = totalVendas - totalTrafegoVal;
+            const roi = totalTrafegoVal > 0 ? ((totalVendas - totalTrafegoVal) / totalTrafegoVal * 100) : 0;
+
+            document.getElementById('totalVendas').textContent = formatarMoeda(totalVendas);
+            document.getElementById('qtdVendas').textContent = qtdVendas;
+            document.getElementById('mediaVendas').textContent = formatarMoeda(media);
+            document.getElementById('lucroLiquido').textContent = formatarMoeda(lucro);
+            document.getElementById('salesCount').textContent = `${qtdVendas} registro${qtdVendas !== 1 ? 's' : ''}`;
+
+            document.getElementById('totalTrafego').textContent = formatarMoeda(totalTrafegoVal);
+            document.getElementById('qtdTrafego').textContent = trafego.length;
+            document.getElementById('totalVendasTrafego').textContent = formatarMoeda(totalVendas);
+            document.getElementById('roiTrafego').textContent = `${roi.toFixed(1)}%`;
+            document.getElementById('trafegoCount').textContent = `${trafego.length} registro${trafego.length !== 1 ? 's' : ''}`;
+
+            atualizarGraficos();
+        }
+
+        function atualizarGraficos() {
+            const planos = ['Mensal', 'Bimestral', 'Trimestral', 'Quadrimestral', 'Semestral', 'Anual'];
+            const contagem = {};
+            const faturamento = {};
+
+            planos.forEach(p => { contagem[p] = 0; faturamento[p] = 0; });
+
+            vendas.forEach(v => {
+                if (v.plano && planos.includes(v.plano)) {
+                    contagem[v.plano]++;
+                    faturamento[v.plano] += parseFloat(v.valor);
+                }
+            });
+
+            const maxContagem = Math.max(...Object.values(contagem), 1);
+            const maxFaturamento = Math.max(...Object.values(faturamento), 1);
+
+            const chartPlanos = document.getElementById('chartPlanos');
+            if (vendas.length === 0) {
+                chartPlanos.innerHTML = '<div class="empty-state"><p>Sem dados ainda</p></div>';
+            } else {
+                chartPlanos.innerHTML = planos.map(plano => `
+                    <div class="chart-bar-item">
+                        <span class="chart-bar-label">${plano}</span>
+                        <div class="chart-bar-track">
+                            <div class="chart-bar-fill" style="width: ${(contagem[plano] / maxContagem * 100)}%">
+                                ${contagem[plano] > 0 ? `<span class="chart-bar-value">${contagem[plano]}</span>` : ''}
+                            </div>
+                        </div>
+                        <span class="chart-bar-count">${contagem[plano]}</span>
+                    </div>
+                `).join('');
+            }
+
+            const chartFaturamento = document.getElementById('chartFaturamento');
+            if (vendas.length === 0) {
+                chartFaturamento.innerHTML = '<div class="empty-state"><p>Sem dados ainda</p></div>';
+            } else {
+                chartFaturamento.innerHTML = planos.map(plano => `
+                    <div class="chart-bar-item">
+                        <span class="chart-bar-label">${plano}</span>
+                        <div class="chart-bar-track">
+                            <div class="chart-bar-fill" style="width: ${(faturamento[plano] / maxFaturamento * 100)}%">
+                                ${faturamento[plano] > 0 ? `<span class="chart-bar-value">${formatarMoeda(faturamento[plano])}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // ============================================
+        // RENDERIZAÇÃO
+        // ============================================
+
+        function renderizarVendas() {
+            if (vendas.length === 0) {
+                salesList.innerHTML = '<div class="empty-state"><div class="icon">🎯</div><p>Nenhuma venda registrada ainda.</p></div>';
+            } else {
+                salesList.innerHTML = vendas.map(venda => `
+                    <div class="sale-item">
+                        <div class="sale-info">
+                            <div class="sale-name">🎖️ ${venda.nome}</div>
+                            <div class="sale-plan">📋 ${venda.plano || 'Não informado'}</div>
+                            <div class="sale-date">📅 ${formatarDataHora(venda.created_at)}</div>
+                        </div>
+                        <div class="sale-value">${formatarMoeda(parseFloat(venda.valor))}</div>
+                        <button class="btn-remove" onclick="removerVenda('${venda.id}')" title="Remover">✕</button>
+                    </div>
+                `).join('');
+            }
+            atualizarEstatisticas();
+        }
+
+        function renderizarTrafego() {
+            if (trafego.length === 0) {
+                trafegoList.innerHTML = '<div class="empty-state"><div class="icon">📢</div><p>Nenhum gasto registrado ainda.</p></div>';
+            } else {
+                trafegoList.innerHTML = trafego.map(item => `
+                    <div class="sale-item trafego">
+                        <div class="sale-info">
+                            <div class="sale-name">📢 ${item.descricao}</div>
+                            <div class="sale-date">📅 ${formatarDataHora(item.created_at)}</div>
+                        </div>
+                        <div class="sale-value negative">-${formatarMoeda(parseFloat(item.valor))}</div>
+                        <button class="btn-remove" onclick="removerTrafego('${item.id}')" title="Remover">✕</button>
+                    </div>
+                `).join('');
+            }
+            atualizarEstatisticas();
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+
+        formVenda.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const nome = nomeInput.value.trim();
+            const plano = planoSelect.value;
+            const valor = valorParaNumero(valorInput.value);
+
+            if (nome && plano && valor > 0) {
+                const success = await adicionarVenda(nome, plano, valor);
+                if (success) {
+                    nomeInput.value = '';
+                    planoSelect.value = '';
+                    valorInput.value = '';
+                    nomeInput.focus();
+                }
+            }
+        });
+
+        formTrafego.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const descricao = descricaoTrafegoInput.value.trim();
+            const valor = valorParaNumero(valorTrafegoInput.value);
+
+            if (descricao && valor > 0) {
+                const success = await adicionarTrafego(descricao, valor);
+                if (success) {
+                    descricaoTrafegoInput.value = '';
+                    valorTrafegoInput.value = '';
+                    descricaoTrafegoInput.focus();
+                }
+            }
+        });
+
+        // ============================================
+        // REALTIME SUBSCRIPTIONS (Atualização em tempo real)
+        // ============================================
+
+        function setupRealtimeSubscriptions() {
+            // Subscrição para vendas
+            supabaseClient
+                .channel('vendas-changes')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'vendas' }, async () => {
+                    await carregarVendas();
+                    renderizarVendas();
+                })
+                .subscribe();
+
+            // Subscrição para tráfego
+            supabaseClient
+                .channel('trafego-changes')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'trafego' }, async () => {
+                    await carregarTrafego();
+                    renderizarTrafego();
+                })
+                .subscribe();
+        }
+
+        // ============================================
+        // INICIALIZAÇÃO
+        // ============================================
+
+        async function init() {
+            showLoading();
+            try {
+                await Promise.all([carregarVendas(), carregarTrafego()]);
+                renderizarVendas();
+                renderizarTrafego();
+                setupRealtimeSubscriptions();
+            } catch (error) {
+                console.error('Erro na inicialização:', error);
+                showToast('Erro ao conectar com o servidor', 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
