@@ -628,6 +628,130 @@
             background: linear-gradient(180deg, #95a5a6 0%, #7f8c8d 100%);
         }
 
+        /* Seção de Lembretes */
+        .lembretes-section {
+            background: linear-gradient(145deg, #4a3d2d 0%, #3d3020 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 2px solid #c4a64a;
+            box-shadow: 0 4px 15px rgba(196, 166, 74, 0.2);
+        }
+
+        .lembretes-section.hidden {
+            display: none;
+        }
+
+        .lembretes-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #8b7355;
+        }
+
+        .lembretes-title h2 {
+            color: #f5d742;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .lembretes-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .lembrete-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            background: linear-gradient(90deg, #3d3020 0%, #2d2518 100%);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 4px solid #f5d742;
+        }
+
+        .lembrete-info {
+            flex: 1;
+        }
+
+        .lembrete-nome {
+            font-weight: bold;
+            color: #f5d742;
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+
+        .lembrete-detalhes {
+            color: #c4a64a;
+            font-size: 0.85rem;
+        }
+
+        .lembrete-dias {
+            color: #e74c3c;
+            font-size: 0.8rem;
+            margin-top: 3px;
+        }
+
+        .lembrete-valor {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #f5d742;
+            margin-right: 15px;
+        }
+
+        .lembrete-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-renovar {
+            background: linear-gradient(180deg, #27ae60 0%, #1e8449 100%);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-renovar:hover {
+            background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
+            transform: scale(1.05);
+        }
+
+        .btn-cancelar-recorrencia {
+            background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancelar-recorrencia:hover {
+            background: linear-gradient(180deg, #ec7063 0%, #e74c3c 100%);
+            transform: scale(1.05);
+        }
+
         .sale-info { flex: 1; }
         .sale-name { font-weight: bold; color: #e8e8e8; font-size: 1rem; margin-bottom: 3px; }
         .sale-plan { color: #c4a64a; font-size: 0.85rem; margin-bottom: 2px; font-weight: 500; }
@@ -805,6 +929,15 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Lembretes de Renovação -->
+            <section class="lembretes-section hidden" id="lembretesSection">
+                <div class="lembretes-title">
+                    <h2>🔔 Renovações Pendentes</h2>
+                    <span class="lembretes-badge" id="lembretesBadge">0</span>
+                </div>
+                <div id="lembretesList"></div>
+            </section>
 
             <!-- Form Section -->
             <section class="form-section">
@@ -1111,6 +1244,145 @@
         }
 
         // ============================================
+        // FUNÇÕES DE RENOVAÇÃO (RECORRÊNCIA)
+        // ============================================
+
+        function getVendasRecorrentesPendentes() {
+            const agora = new Date();
+            const pendentes = [];
+
+            // Agrupar vendas por nome do cliente (pegar a mais recente de cada)
+            const vendasPorCliente = {};
+            vendas.forEach(v => {
+                if (v.tipo === 'Recorrente') {
+                    const nomeNormalizado = v.nome.toLowerCase().trim();
+                    if (!vendasPorCliente[nomeNormalizado] ||
+                        new Date(v.created_at) > new Date(vendasPorCliente[nomeNormalizado].created_at)) {
+                        vendasPorCliente[nomeNormalizado] = v;
+                    }
+                }
+            });
+
+            // Verificar quais estão com mais de 30 dias
+            Object.values(vendasPorCliente).forEach(venda => {
+                const dataVenda = new Date(venda.created_at);
+                const diffTime = agora - dataVenda;
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays >= 30) {
+                    // Verificar se já tem venda no mês atual
+                    const mesAtual = agora.getMonth();
+                    const anoAtual = agora.getFullYear();
+                    const nomeNormalizado = venda.nome.toLowerCase().trim();
+
+                    const temVendaNoMes = vendas.some(v => {
+                        const dataV = new Date(v.created_at);
+                        return v.nome.toLowerCase().trim() === nomeNormalizado &&
+                               dataV.getMonth() === mesAtual &&
+                               dataV.getFullYear() === anoAtual &&
+                               v.id !== venda.id;
+                    });
+
+                    if (!temVendaNoMes) {
+                        pendentes.push({
+                            ...venda,
+                            diasAtrasados: diffDays
+                        });
+                    }
+                }
+            });
+
+            return pendentes.sort((a, b) => b.diasAtrasados - a.diasAtrasados);
+        }
+
+        function renderizarLembretes() {
+            const pendentes = getVendasRecorrentesPendentes();
+            const section = document.getElementById('lembretesSection');
+            const lista = document.getElementById('lembretesList');
+            const badge = document.getElementById('lembretesBadge');
+
+            if (pendentes.length === 0) {
+                section.classList.add('hidden');
+                return;
+            }
+
+            section.classList.remove('hidden');
+            badge.textContent = pendentes.length;
+
+            lista.innerHTML = pendentes.map(venda => `
+                <div class="lembrete-item">
+                    <div class="lembrete-info">
+                        <div class="lembrete-nome">🔔 ${venda.nome}</div>
+                        <div class="lembrete-detalhes">📋 ${venda.plano} | 🔄 Recorrente</div>
+                        <div class="lembrete-dias">⏰ ${venda.diasAtrasados} dias desde a última venda</div>
+                    </div>
+                    <div class="lembrete-valor">${formatarMoeda(parseFloat(venda.valor))}</div>
+                    <div class="lembrete-actions">
+                        <button class="btn-renovar" onclick="renovarVenda('${venda.id}')">✓ Renovar</button>
+                        <button class="btn-cancelar-recorrencia" onclick="cancelarRecorrencia('${venda.id}')">✕ Cancelar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function renovarVenda(idOriginal) {
+            const vendaOriginal = vendas.find(v => v.id === idOriginal);
+            if (!vendaOriginal) return;
+
+            if (!confirm(`Confirmar renovação para ${vendaOriginal.nome}?\n\nValor: ${formatarMoeda(parseFloat(vendaOriginal.valor))}\nPlano: ${vendaOriginal.plano}`)) {
+                return;
+            }
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('vendas')
+                    .insert([{
+                        nome: vendaOriginal.nome,
+                        plano: vendaOriginal.plano,
+                        tipo: 'Recorrente',
+                        valor: vendaOriginal.valor
+                    }])
+                    .select();
+
+                if (error) throw error;
+
+                vendas.unshift(data[0]);
+                renderizarVendas();
+                renderizarLembretes();
+                showToast(`Venda renovada para ${vendaOriginal.nome}!`);
+            } catch (error) {
+                console.error('Erro ao renovar venda:', error);
+                showToast('Erro ao renovar venda', 'error');
+            }
+        }
+
+        async function cancelarRecorrencia(id) {
+            const venda = vendas.find(v => v.id === id);
+            if (!venda) return;
+
+            if (!confirm(`Cancelar recorrência de ${venda.nome}?\n\nA venda será marcada como Avulsa e não aparecerá mais nos lembretes.`)) {
+                return;
+            }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('vendas')
+                    .update({ tipo: 'Avulsa' })
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                venda.tipo = 'Avulsa';
+                renderizarVendas();
+                renderizarLembretes();
+                showToast(`Recorrência cancelada para ${venda.nome}`);
+            } catch (error) {
+                console.error('Erro ao cancelar recorrência:', error);
+                showToast('Erro ao cancelar', 'error');
+            }
+        }
+
+        // ============================================
         // FUNÇÕES DE EDIÇÃO
         // ============================================
 
@@ -1351,6 +1623,7 @@
             }
 
             atualizarEstatisticas();
+            renderizarLembretes();
         }
 
         function renderizarTrafego() {
