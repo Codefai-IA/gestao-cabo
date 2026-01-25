@@ -848,10 +848,10 @@
     <!-- Toast -->
     <div class="toast hidden" id="toast"></div>
 
-    <!-- Modal Editar Tipo -->
+    <!-- Modal Editar Venda -->
     <div class="modal-overlay hidden" id="modalEditar">
         <div class="modal">
-            <h3>Editar Tipo de Pagamento</h3>
+            <h3>Editar Venda</h3>
             <input type="hidden" id="editarVendaId">
             <div class="form-group">
                 <label for="editarTipo">Tipo de Pagamento</label>
@@ -859,6 +859,10 @@
                     <option value="Avulsa">Avulsa (Pagamento Único)</option>
                     <option value="Recorrente">Recorrente (Mensalidade)</option>
                 </select>
+            </div>
+            <div class="form-group" style="margin-top: 15px;">
+                <label for="editarValor">Valor (R$)</label>
+                <input type="text" id="editarValor" placeholder="0,00">
             </div>
             <div class="modal-buttons">
                 <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
@@ -1144,6 +1148,7 @@
 
         mascaraValor(valorInput);
         mascaraValor(valorTrafegoInput);
+        mascaraValor(document.getElementById('editarValor'));
 
         function valorParaNumero(valorFormatado) {
             if (!valorFormatado) return 0;
@@ -1386,9 +1391,12 @@
         // FUNÇÕES DE EDIÇÃO
         // ============================================
 
-        function abrirModalEditar(id, tipoAtual) {
+        function abrirModalEditar(id, tipoAtual, valorAtual) {
             document.getElementById('editarVendaId').value = id;
             document.getElementById('editarTipo').value = tipoAtual || 'Avulsa';
+            // Formatar valor para exibição
+            const valorFormatado = parseFloat(valorAtual).toFixed(2).replace('.', ',');
+            document.getElementById('editarValor').value = valorFormatado;
             document.getElementById('modalEditar').classList.remove('hidden');
         }
 
@@ -1399,11 +1407,17 @@
         async function salvarEdicao() {
             const id = document.getElementById('editarVendaId').value;
             const novoTipo = document.getElementById('editarTipo').value;
+            const novoValor = valorParaNumero(document.getElementById('editarValor').value);
+
+            if (novoValor <= 0) {
+                showToast('Valor deve ser maior que zero', 'error');
+                return;
+            }
 
             try {
                 const { error } = await supabaseClient
                     .from('vendas')
-                    .update({ tipo: novoTipo })
+                    .update({ tipo: novoTipo, valor: novoValor })
                     .eq('id', id);
 
                 if (error) throw error;
@@ -1412,11 +1426,12 @@
                 const venda = vendas.find(v => v.id === id);
                 if (venda) {
                     venda.tipo = novoTipo;
+                    venda.valor = novoValor;
                 }
 
                 renderizarVendas();
                 fecharModal();
-                showToast('Tipo de pagamento atualizado!');
+                showToast('Venda atualizada!');
             } catch (error) {
                 console.error('Erro ao atualizar venda:', error);
                 showToast('Erro ao atualizar', 'error');
@@ -1607,7 +1622,7 @@
                         </div>
                         <div class="sale-value">${formatarMoeda(parseFloat(venda.valor))}</div>
                         <div class="sale-actions">
-                            <button class="btn-edit" onclick="abrirModalEditar('${venda.id}', '${venda.tipo || 'Avulsa'}')" title="Editar Tipo">✏️</button>
+                            <button class="btn-edit" onclick="abrirModalEditar('${venda.id}', '${venda.tipo || 'Avulsa'}', '${venda.valor}')" title="Editar">✏️</button>
                             <button class="btn-remove" onclick="removerVenda('${venda.id}')" title="Remover">✕</button>
                         </div>
                     </div>
