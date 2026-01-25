@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS vendas (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     plano VARCHAR(50) NOT NULL CHECK (plano IN ('Mensal', 'Bimestral', 'Trimestral', 'Quadrimestral', 'Semestral', 'Anual')),
+    tipo VARCHAR(20) NOT NULL DEFAULT 'Avulsa' CHECK (tipo IN ('Avulsa', 'Recorrente')),
     valor DECIMAL(10, 2) NOT NULL CHECK (valor > 0),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('America/Sao_Paulo', NOW()),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('America/Sao_Paulo', NOW())
@@ -22,12 +23,14 @@ CREATE TABLE IF NOT EXISTS vendas (
 -- Índices para melhorar performance
 CREATE INDEX idx_vendas_created_at ON vendas(created_at DESC);
 CREATE INDEX idx_vendas_plano ON vendas(plano);
+CREATE INDEX idx_vendas_tipo ON vendas(tipo);
 
 -- Comentários na tabela
 COMMENT ON TABLE vendas IS 'Tabela de vendas do sistema Cabo Pereira';
 COMMENT ON COLUMN vendas.id IS 'Identificador único da venda';
 COMMENT ON COLUMN vendas.nome IS 'Nome do aluno';
 COMMENT ON COLUMN vendas.plano IS 'Tipo do plano vendido';
+COMMENT ON COLUMN vendas.tipo IS 'Tipo de pagamento: Avulsa (única) ou Recorrente (mensalidade)';
 COMMENT ON COLUMN vendas.valor IS 'Valor da venda em reais';
 COMMENT ON COLUMN vendas.created_at IS 'Data e hora do registro';
 

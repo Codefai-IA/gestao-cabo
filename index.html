@@ -471,6 +471,163 @@
             border-left-color: #e74c3c;
         }
 
+        .sale-item.recorrente {
+            border-left-color: #3498db;
+        }
+
+        .tipo-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin-left: 8px;
+            font-weight: bold;
+        }
+
+        .tipo-badge.recorrente {
+            background: #3498db;
+            color: white;
+        }
+
+        .tipo-badge.avulsa {
+            background: #9b59b6;
+            color: white;
+        }
+
+        /* Search Box */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #5c7a5c;
+            border-radius: 8px;
+            background: #1a2e1a;
+            color: #e8e8e8;
+            font-size: 1rem;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #c4a64a;
+        }
+
+        .search-box input::placeholder {
+            color: #6b8b6b;
+        }
+
+        .btn-clear-search {
+            padding: 12px 20px;
+            background: linear-gradient(180deg, #5c7a5c 0%, #3d5a3d 100%);
+            color: #f0e6d3;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-clear-search:hover {
+            background: linear-gradient(180deg, #6c8a6c 0%, #4d6a4d 100%);
+        }
+
+        /* Edit Button */
+        .btn-edit {
+            background: linear-gradient(180deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+        }
+
+        .btn-edit:hover {
+            background: linear-gradient(180deg, #4aa3e8 0%, #3a90c9 100%);
+            transform: scale(1.1);
+        }
+
+        .sale-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1002;
+        }
+
+        .modal-overlay.hidden {
+            display: none;
+        }
+
+        .modal {
+            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #5c7a5c;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal h3 {
+            color: #c4a64a;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save {
+            background: linear-gradient(180deg, #27ae60 0%, #1e8449 100%);
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
+        }
+
+        .btn-cancel {
+            background: linear-gradient(180deg, #7f8c8d 0%, #5d6d6e 100%);
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background: linear-gradient(180deg, #95a5a6 0%, #7f8c8d 100%);
+        }
+
         .sale-info { flex: 1; }
         .sale-name { font-weight: bold; color: #e8e8e8; font-size: 1rem; margin-bottom: 3px; }
         .sale-plan { color: #c4a64a; font-size: 0.85rem; margin-bottom: 2px; font-weight: 500; }
@@ -567,6 +724,25 @@
     <!-- Toast -->
     <div class="toast hidden" id="toast"></div>
 
+    <!-- Modal Editar Tipo -->
+    <div class="modal-overlay hidden" id="modalEditar">
+        <div class="modal">
+            <h3>Editar Tipo de Pagamento</h3>
+            <input type="hidden" id="editarVendaId">
+            <div class="form-group">
+                <label for="editarTipo">Tipo de Pagamento</label>
+                <select id="editarTipo">
+                    <option value="Avulsa">Avulsa (Pagamento Único)</option>
+                    <option value="Recorrente">Recorrente (Mensalidade)</option>
+                </select>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+                <button class="btn-save" onclick="salvarEdicao()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
     <header class="header">
         <h1>Cabo Pereira <span class="status-badge status-online" id="statusBadge">Online</span></h1>
         <p class="subtitle">Sistema de Controle de Vendas</p>
@@ -654,6 +830,13 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="tipoVenda">Tipo de Pagamento</label>
+                            <select id="tipoVenda" required>
+                                <option value="Avulsa">Avulsa (Pagamento Único)</option>
+                                <option value="Recorrente">Recorrente (Mensalidade)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="valorVenda">Valor (R$)</label>
                             <input type="text" id="valorVenda" placeholder="0,00" required>
                         </div>
@@ -669,6 +852,10 @@
                 <div class="sales-title">
                     <h2>📋 Registro de Vendas</h2>
                     <span class="sales-count" id="salesCount">0 registros</span>
+                </div>
+                <div class="search-box">
+                    <input type="text" id="buscaNome" placeholder="🔍 Buscar por nome do cliente..." oninput="filtrarVendas()">
+                    <button class="btn-clear-search" onclick="limparBusca()">Limpar</button>
                 </div>
                 <div class="sales-list" id="salesList">
                     <div class="empty-state">
@@ -769,6 +956,7 @@
         const formVenda = document.getElementById('formVenda');
         const nomeInput = document.getElementById('nomeAluno');
         const planoSelect = document.getElementById('planoVenda');
+        const tipoSelect = document.getElementById('tipoVenda');
         const valorInput = document.getElementById('valorVenda');
         const salesList = document.getElementById('salesList');
         const btnVenda = document.getElementById('btnVenda');
@@ -876,14 +1064,14 @@
             }
         }
 
-        async function adicionarVenda(nome, plano, valor) {
+        async function adicionarVenda(nome, plano, tipo, valor) {
             try {
                 btnVenda.disabled = true;
                 btnVenda.innerHTML = '<span>⏳</span> Salvando...';
 
                 const { data, error } = await supabaseClient
                     .from('vendas')
-                    .insert([{ nome, plano, valor }])
+                    .insert([{ nome, plano, tipo, valor }])
                     .select();
 
                 if (error) throw error;
@@ -919,6 +1107,47 @@
             } catch (error) {
                 console.error('Erro ao remover venda:', error);
                 showToast('Erro ao remover venda', 'error');
+            }
+        }
+
+        // ============================================
+        // FUNÇÕES DE EDIÇÃO
+        // ============================================
+
+        function abrirModalEditar(id, tipoAtual) {
+            document.getElementById('editarVendaId').value = id;
+            document.getElementById('editarTipo').value = tipoAtual || 'Avulsa';
+            document.getElementById('modalEditar').classList.remove('hidden');
+        }
+
+        function fecharModal() {
+            document.getElementById('modalEditar').classList.add('hidden');
+        }
+
+        async function salvarEdicao() {
+            const id = document.getElementById('editarVendaId').value;
+            const novoTipo = document.getElementById('editarTipo').value;
+
+            try {
+                const { error } = await supabaseClient
+                    .from('vendas')
+                    .update({ tipo: novoTipo })
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                // Atualizar no array local
+                const venda = vendas.find(v => v.id === id);
+                if (venda) {
+                    venda.tipo = novoTipo;
+                }
+
+                renderizarVendas();
+                fecharModal();
+                showToast('Tipo de pagamento atualizado!');
+            } catch (error) {
+                console.error('Erro ao atualizar venda:', error);
+                showToast('Erro ao atualizar', 'error');
             }
         }
 
@@ -1072,22 +1301,55 @@
         // RENDERIZAÇÃO
         // ============================================
 
+        function getVendasFiltradas() {
+            const busca = document.getElementById('buscaNome').value.toLowerCase().trim();
+            if (!busca) return vendas;
+            return vendas.filter(v => v.nome.toLowerCase().includes(busca));
+        }
+
+        function filtrarVendas() {
+            renderizarVendas();
+        }
+
+        function limparBusca() {
+            document.getElementById('buscaNome').value = '';
+            renderizarVendas();
+        }
+
         function renderizarVendas() {
+            const vendasFiltradas = getVendasFiltradas();
+            const totalVendas = vendas.length;
+            const totalFiltradas = vendasFiltradas.length;
+
             if (vendas.length === 0) {
                 salesList.innerHTML = '<div class="empty-state"><div class="icon">🎯</div><p>Nenhuma venda registrada ainda.</p></div>';
+            } else if (vendasFiltradas.length === 0) {
+                salesList.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p>Nenhum cliente encontrado com esse nome.</p></div>';
             } else {
-                salesList.innerHTML = vendas.map(venda => `
-                    <div class="sale-item">
+                salesList.innerHTML = vendasFiltradas.map(venda => `
+                    <div class="sale-item ${venda.tipo === 'Recorrente' ? 'recorrente' : ''}">
                         <div class="sale-info">
                             <div class="sale-name">🎖️ ${venda.nome}</div>
-                            <div class="sale-plan">📋 ${venda.plano || 'Não informado'}</div>
+                            <div class="sale-plan">📋 ${venda.plano || 'Não informado'} ${venda.tipo === 'Recorrente' ? '<span class="tipo-badge recorrente">🔄 Recorrente</span>' : '<span class="tipo-badge avulsa">💳 Avulsa</span>'}</div>
                             <div class="sale-date">📅 ${formatarDataHora(venda.created_at)}</div>
                         </div>
                         <div class="sale-value">${formatarMoeda(parseFloat(venda.valor))}</div>
-                        <button class="btn-remove" onclick="removerVenda('${venda.id}')" title="Remover">✕</button>
+                        <div class="sale-actions">
+                            <button class="btn-edit" onclick="abrirModalEditar('${venda.id}', '${venda.tipo || 'Avulsa'}')" title="Editar Tipo">✏️</button>
+                            <button class="btn-remove" onclick="removerVenda('${venda.id}')" title="Remover">✕</button>
+                        </div>
                     </div>
                 `).join('');
             }
+
+            // Atualizar contador com info de filtro
+            const buscaAtiva = document.getElementById('buscaNome').value.trim();
+            if (buscaAtiva && totalVendas > 0) {
+                document.getElementById('salesCount').textContent = `${totalFiltradas} de ${totalVendas} registro${totalVendas !== 1 ? 's' : ''}`;
+            } else {
+                document.getElementById('salesCount').textContent = `${totalVendas} registro${totalVendas !== 1 ? 's' : ''}`;
+            }
+
             atualizarEstatisticas();
         }
 
@@ -1117,13 +1379,15 @@
             e.preventDefault();
             const nome = nomeInput.value.trim();
             const plano = planoSelect.value;
+            const tipo = tipoSelect.value;
             const valor = valorParaNumero(valorInput.value);
 
-            if (nome && plano && valor > 0) {
-                const success = await adicionarVenda(nome, plano, valor);
+            if (nome && plano && tipo && valor > 0) {
+                const success = await adicionarVenda(nome, plano, tipo, valor);
                 if (success) {
                     nomeInput.value = '';
                     planoSelect.value = '';
+                    tipoSelect.value = 'Avulsa';
                     valorInput.value = '';
                     nomeInput.focus();
                 }
