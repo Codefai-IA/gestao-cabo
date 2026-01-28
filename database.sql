@@ -15,15 +15,20 @@ CREATE TABLE IF NOT EXISTS vendas (
     nome VARCHAR(255) NOT NULL,
     plano VARCHAR(50) NOT NULL CHECK (plano IN ('Mensal', 'Bimestral', 'Trimestral', 'Quadrimestral', 'Semestral', 'Anual')),
     tipo VARCHAR(20) NOT NULL DEFAULT 'Avulsa' CHECK (tipo IN ('Avulsa', 'Recorrente')),
+    origem VARCHAR(20) NOT NULL DEFAULT 'Organico' CHECK (origem IN ('Organico', 'Trafego')),
     valor DECIMAL(10, 2) NOT NULL CHECK (valor > 0),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('America/Sao_Paulo', NOW()),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('America/Sao_Paulo', NOW())
 );
 
+-- Migração: Adicionar coluna origem se não existir (para bancos existentes)
+-- ALTER TABLE vendas ADD COLUMN IF NOT EXISTS origem VARCHAR(20) NOT NULL DEFAULT 'Organico' CHECK (origem IN ('Organico', 'Trafego'));
+
 -- Índices para melhorar performance
 CREATE INDEX idx_vendas_created_at ON vendas(created_at DESC);
 CREATE INDEX idx_vendas_plano ON vendas(plano);
 CREATE INDEX idx_vendas_tipo ON vendas(tipo);
+CREATE INDEX idx_vendas_origem ON vendas(origem);
 
 -- Comentários na tabela
 COMMENT ON TABLE vendas IS 'Tabela de vendas do sistema Cabo Pereira';
@@ -31,6 +36,7 @@ COMMENT ON COLUMN vendas.id IS 'Identificador único da venda';
 COMMENT ON COLUMN vendas.nome IS 'Nome do aluno';
 COMMENT ON COLUMN vendas.plano IS 'Tipo do plano vendido';
 COMMENT ON COLUMN vendas.tipo IS 'Tipo de pagamento: Avulsa (única) ou Recorrente (mensalidade)';
+COMMENT ON COLUMN vendas.origem IS 'Origem do lead: Organico ou Trafego (pago)';
 COMMENT ON COLUMN vendas.valor IS 'Valor da venda em reais';
 COMMENT ON COLUMN vendas.created_at IS 'Data e hora do registro';
 
@@ -56,6 +62,29 @@ COMMENT ON COLUMN trafego.valor IS 'Valor gasto em reais';
 COMMENT ON COLUMN trafego.created_at IS 'Data e hora do registro';
 
 -- ============================================
+-- TABELA: LEADS (Leads recebidos por dia)
+-- ============================================
+CREATE TABLE IF NOT EXISTS leads (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    data DATE NOT NULL UNIQUE,
+    organico INTEGER NOT NULL DEFAULT 0 CHECK (organico >= 0),
+    trafego INTEGER NOT NULL DEFAULT 0 CHECK (trafego >= 0),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('America/Sao_Paulo', NOW()),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('America/Sao_Paulo', NOW())
+);
+
+-- Índices para melhorar performance
+CREATE INDEX idx_leads_data ON leads(data DESC);
+
+-- Comentários na tabela
+COMMENT ON TABLE leads IS 'Tabela de leads recebidos por dia';
+COMMENT ON COLUMN leads.id IS 'Identificador único do registro';
+COMMENT ON COLUMN leads.data IS 'Data do registro de leads';
+COMMENT ON COLUMN leads.organico IS 'Quantidade de leads orgânicos';
+COMMENT ON COLUMN leads.trafego IS 'Quantidade de leads de tráfego pago';
+COMMENT ON COLUMN leads.created_at IS 'Data e hora do registro';
+
+-- ============================================
 -- FUNÇÃO: Atualizar updated_at automaticamente
 -- ============================================
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -77,6 +106,11 @@ CREATE TRIGGER update_trafego_updated_at
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
+CREATE TRIGGER update_leads_updated_at
+    BEFORE UPDATE ON leads
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
 -- ============================================
 -- ROW LEVEL SECURITY (RLS)
 -- Habilitar para segurança
@@ -85,6 +119,7 @@ CREATE TRIGGER update_trafego_updated_at
 -- Habilitar RLS nas tabelas
 ALTER TABLE vendas ENABLE ROW LEVEL SECURITY;
 ALTER TABLE trafego ENABLE ROW LEVEL SECURITY;
+ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
 
 -- Políticas de acesso público (para aplicação sem autenticação)
 -- Se você usar autenticação, ajuste essas políticas
@@ -113,6 +148,19 @@ CREATE POLICY "Permitir UPDATE em trafego" ON trafego
     FOR UPDATE USING (true);
 
 CREATE POLICY "Permitir DELETE em trafego" ON trafego
+    FOR DELETE USING (true);
+
+-- Política para leads - permitir todas as operações
+CREATE POLICY "Permitir SELECT em leads" ON leads
+    FOR SELECT USING (true);
+
+CREATE POLICY "Permitir INSERT em leads" ON leads
+    FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Permitir UPDATE em leads" ON leads
+    FOR UPDATE USING (true);
+
+CREATE POLICY "Permitir DELETE em leads" ON leads
     FOR DELETE USING (true);
 
 -- ============================================

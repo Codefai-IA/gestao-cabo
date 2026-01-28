@@ -534,6 +534,652 @@
             background: linear-gradient(180deg, #6c8a6c 0%, #4d6a4d 100%);
         }
 
+        /* Filtro de Data para Vendas */
+        .filtro-data-vendas {
+            margin-bottom: 15px;
+        }
+
+        .filtro-data-rapidos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .btn-filtro-data {
+            padding: 8px 14px;
+            background: linear-gradient(180deg, #3d5a3d 0%, #2a4a2a 100%);
+            color: #b8b8b8;
+            border: 2px solid #5c7a5c;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-filtro-data:hover {
+            background: linear-gradient(180deg, #4d6a4d 0%, #3a5a3a 100%);
+            color: #e8e8e8;
+        }
+
+        .btn-filtro-data.active {
+            background: linear-gradient(180deg, #c4a64a 0%, #a08030 100%);
+            color: #1a2e1a;
+            border-color: #d4b65a;
+            font-weight: bold;
+        }
+
+        .filtro-data-calendario {
+            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #5c7a5c;
+            margin-top: 10px;
+        }
+
+        .calendario-inputs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .calendario-campo {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .calendario-campo label {
+            color: #c4a64a;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .calendario-campo input[type="date"] {
+            padding: 10px 12px;
+            border: 2px solid #5c7a5c;
+            border-radius: 8px;
+            background: #1a2e1a;
+            color: #e8e8e8;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .calendario-campo input[type="date"]:focus {
+            outline: none;
+            border-color: #c4a64a;
+        }
+
+        .calendario-campo input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.8);
+            cursor: pointer;
+        }
+
+        .btn-limpar-data {
+            padding: 10px 16px;
+            background: linear-gradient(180deg, #8b5a5a 0%, #6b3a3a 100%);
+            color: #f0e6d3;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .btn-limpar-data:hover {
+            background: linear-gradient(180deg, #9b6a6a 0%, #7b4a4a 100%);
+        }
+
+        /* Métricas Tab Styles */
+        .metricas-filtros {
+            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #5c7a5c;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .filtro-grupo {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .filtro-grupo label {
+            color: #c4a64a;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .filtro-periodo-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .btn-filtro-metrica {
+            padding: 8px 14px;
+            background: linear-gradient(180deg, #3d5a3d 0%, #2a4a2a 100%);
+            color: #b8b8b8;
+            border: 2px solid #5c7a5c;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-filtro-metrica:hover {
+            background: linear-gradient(180deg, #4d6a4d 0%, #3a5a3a 100%);
+            color: #e8e8e8;
+        }
+
+        .btn-filtro-metrica.active {
+            background: linear-gradient(180deg, #c4a64a 0%, #a08030 100%);
+            color: #1a2e1a;
+            border-color: #d4b65a;
+            font-weight: bold;
+        }
+
+        .filtro-datas {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filtro-datas input[type="date"] {
+            padding: 8px 12px;
+            border: 2px solid #5c7a5c;
+            border-radius: 8px;
+            background: #1a2e1a;
+            color: #e8e8e8;
+            font-size: 0.9rem;
+        }
+
+        .filtro-datas input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.8);
+            cursor: pointer;
+        }
+
+        .filtro-datas span {
+            color: #8b8b8b;
+        }
+
+        .metricas-stats .stat-card.organico {
+            border-left: 4px solid #4caf50;
+        }
+
+        .metricas-stats .stat-card.trafego-pago {
+            border-left: 4px solid #ff9800;
+        }
+
+        .metricas-section {
+            background: linear-gradient(145deg, #2d4a2d 0%, #1a3a1a 100%);
+            border-radius: 12px;
+            border: 2px solid #5c7a5c;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            color: #c4a64a;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #5c7a5c;
+        }
+
+        .comparativo-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .comparativo-barra {
+            display: flex;
+            height: 50px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #5c7a5c;
+        }
+
+        .barra-organico {
+            background: linear-gradient(180deg, #4caf50 0%, #388e3c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: width 0.5s ease;
+            min-width: 80px;
+        }
+
+        .barra-trafego {
+            background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: width 0.5s ease;
+            min-width: 80px;
+        }
+
+        .barra-label, .barra-valor {
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .comparativo-detalhes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .detalhe-card {
+            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid #5c7a5c;
+        }
+
+        .detalhe-card.organico {
+            border-left: 4px solid #4caf50;
+        }
+
+        .detalhe-card.trafego-pago {
+            border-left: 4px solid #ff9800;
+        }
+
+        .detalhe-card h4 {
+            color: #c4a64a;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .detalhe-info p {
+            color: #e8e8e8;
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .detalhe-info span {
+            color: #c4a64a;
+            font-weight: bold;
+        }
+
+        .leads-por-dia-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .dia-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
+            border-radius: 8px;
+            border: 1px solid #5c7a5c;
+        }
+
+        .dia-data {
+            color: #c4a64a;
+            font-weight: bold;
+            min-width: 100px;
+        }
+
+        .dia-barras {
+            flex: 1;
+            display: flex;
+            height: 24px;
+            border-radius: 4px;
+            overflow: hidden;
+            background: #1a2e1a;
+        }
+
+        .dia-barra-organico {
+            background: linear-gradient(180deg, #4caf50 0%, #388e3c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: width 0.3s ease;
+        }
+
+        .dia-barra-trafego {
+            background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: width 0.3s ease;
+        }
+
+        .dia-barra-organico span, .dia-barra-trafego span {
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .dia-total {
+            color: #e8e8e8;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        .tabela-metricas-container {
+            overflow-x: auto;
+        }
+
+        .tabela-metricas {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1a2e1a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tabela-metricas th {
+            background: linear-gradient(180deg, #3d5a3d 0%, #2a4a2a 100%);
+            color: #c4a64a;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tabela-metricas td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #3d5a3d;
+            color: #e8e8e8;
+        }
+
+        .tabela-metricas tr:hover {
+            background: #2a4a2a;
+        }
+
+        .tabela-metricas .valor-organico {
+            color: #4caf50;
+        }
+
+        .tabela-metricas .valor-trafego {
+            color: #ff9800;
+        }
+
+        /* Badge de origem na lista de vendas */
+        .origem-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .origem-badge.organico {
+            background: linear-gradient(180deg, #4caf50 0%, #388e3c 100%);
+            color: white;
+        }
+
+        .origem-badge.trafego {
+            background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+        }
+
+        /* Registro de Leads */
+        .registro-leads-section {
+            margin-bottom: 20px;
+        }
+
+        .form-leads {
+            margin-bottom: 15px;
+        }
+
+        .leads-input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .lead-input-card {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .lead-input-card label {
+            color: #c4a64a;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .lead-input-card input {
+            padding: 12px;
+            border: 2px solid #5c7a5c;
+            border-radius: 8px;
+            background: #1a2e1a;
+            color: #e8e8e8;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .lead-input-card.organico input {
+            border-color: #4caf50;
+        }
+
+        .lead-input-card.trafego input {
+            border-color: #ff9800;
+        }
+
+        .lead-input-card input:focus {
+            outline: none;
+            border-color: #c4a64a;
+        }
+
+        .btn-add-leads {
+            padding: 12px 24px;
+            background: linear-gradient(180deg, #c4a64a 0%, #a08030 100%);
+            color: #1a2e1a;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+
+        .btn-add-leads:hover {
+            background: linear-gradient(180deg, #d4b65a 0%, #b09040 100%);
+        }
+
+        .leads-registrados-lista {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+
+        .lead-registro-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #5c7a5c;
+        }
+
+        .lead-registro-data {
+            color: #c4a64a;
+            font-weight: bold;
+            min-width: 100px;
+        }
+
+        .lead-registro-valores {
+            display: flex;
+            gap: 20px;
+        }
+
+        .lead-registro-valores span {
+            color: #e8e8e8;
+        }
+
+        .lead-registro-valores .organico {
+            color: #4caf50;
+        }
+
+        .lead-registro-valores .trafego {
+            color: #ff9800;
+        }
+
+        .lead-registro-total {
+            color: #c4a64a;
+            font-weight: bold;
+        }
+
+        .btn-remove-lead {
+            background: #8b5a5a;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-remove-lead:hover {
+            background: #a06a6a;
+        }
+
+        /* Cards de Conversão */
+        .conversao-stats {
+            margin-bottom: 20px;
+        }
+
+        .conversao-stats .stat-card.conversao {
+            border-left: 4px solid #9c27b0;
+        }
+
+        .conversao-detalhes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .conversao-card {
+            background: linear-gradient(145deg, #2d4a2d 0%, #1a3a1a 100%);
+            border-radius: 12px;
+            border: 2px solid #5c7a5c;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .conversao-card.organico {
+            border-left: 4px solid #4caf50;
+        }
+
+        .conversao-card.trafego {
+            border-left: 4px solid #ff9800;
+        }
+
+        .conversao-card h4 {
+            color: #c4a64a;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .conversao-numero {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #e8e8e8;
+            margin-bottom: 10px;
+        }
+
+        .conversao-card.organico .conversao-numero {
+            color: #4caf50;
+        }
+
+        .conversao-card.trafego .conversao-numero {
+            color: #ff9800;
+        }
+
+        .conversao-card.cac {
+            border-left: 4px solid #e91e63;
+        }
+
+        .conversao-card.cac .conversao-numero {
+            color: #e91e63;
+            font-size: 2rem;
+        }
+
+        .cac-roi-info {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #5c7a5c;
+            color: #b8b8b8;
+            font-size: 0.9rem;
+        }
+
+        .cac-roi-info strong {
+            color: #4caf50;
+        }
+
+        /* Indicador de Período */
+        .periodo-selecionado {
+            background: linear-gradient(145deg, #c4a64a 0%, #a08030 100%);
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .periodo-label {
+            color: #1a2e1a;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .periodo-valor {
+            color: #1a2e1a;
+            font-weight: bold;
+            font-size: 1.1rem;
+            background: rgba(255,255,255,0.3);
+            padding: 4px 12px;
+            border-radius: 6px;
+        }
+
+        .conversao-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            color: #b8b8b8;
+            font-size: 0.9rem;
+        }
+
+        .conversao-info strong {
+            color: #e8e8e8;
+        }
+
         /* Edit Button */
         .btn-edit {
             background: linear-gradient(180deg, #3498db 0%, #2980b9 100%);
@@ -945,6 +1591,13 @@
                 </select>
             </div>
             <div class="form-group" style="margin-top: 15px;">
+                <label for="editarOrigem">Origem do Lead</label>
+                <select id="editarOrigem">
+                    <option value="Organico">🌱 Orgânico</option>
+                    <option value="Trafego">📢 Tráfego Pago</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-top: 15px;">
                 <label for="editarValor">Valor (R$)</label>
                 <input type="text" id="editarValor" placeholder="0,00">
             </div>
@@ -969,6 +1622,9 @@
             </button>
             <button class="tab-btn" onclick="switchTab('trafego')">
                 📢 Tráfego
+            </button>
+            <button class="tab-btn" onclick="switchTab('metricas')">
+                📊 Métricas
             </button>
         </div>
 
@@ -1092,6 +1748,13 @@
                             <label for="valorVenda">Valor (R$)</label>
                             <input type="text" id="valorVenda" placeholder="0,00" required>
                         </div>
+                        <div class="form-group">
+                            <label for="origemVenda">Origem do Lead</label>
+                            <select id="origemVenda" required>
+                                <option value="Organico">🌱 Orgânico</option>
+                                <option value="Trafego">📢 Tráfego Pago</option>
+                            </select>
+                        </div>
                     </div>
                     <button type="submit" class="btn-add" id="btnVenda">
                         <span>⚔️</span> Adicionar Venda
@@ -1108,6 +1771,30 @@
                 <div class="search-box">
                     <input type="text" id="buscaNome" placeholder="🔍 Buscar por nome do cliente..." oninput="filtrarVendas()">
                     <button class="btn-clear-search" onclick="limparBusca()">Limpar</button>
+                </div>
+                <!-- Filtro de Data -->
+                <div class="filtro-data-vendas">
+                    <div class="filtro-data-rapidos">
+                        <button class="btn-filtro-data active" data-filtro="todos" onclick="filtrarPorData('todos')">Todos</button>
+                        <button class="btn-filtro-data" data-filtro="hoje" onclick="filtrarPorData('hoje')">Hoje</button>
+                        <button class="btn-filtro-data" data-filtro="ontem" onclick="filtrarPorData('ontem')">Ontem</button>
+                        <button class="btn-filtro-data" data-filtro="7dias" onclick="filtrarPorData('7dias')">Últimos 7 dias</button>
+                        <button class="btn-filtro-data" data-filtro="mes" onclick="filtrarPorData('mes')">Este mês</button>
+                        <button class="btn-filtro-data" data-filtro="personalizado" onclick="toggleCalendario()">📅 Personalizado</button>
+                    </div>
+                    <div class="filtro-data-calendario" id="filtroCalendario" style="display: none;">
+                        <div class="calendario-inputs">
+                            <div class="calendario-campo">
+                                <label>De:</label>
+                                <input type="date" id="dataInicio" onchange="filtrarPorDataPersonalizada()">
+                            </div>
+                            <div class="calendario-campo">
+                                <label>Até:</label>
+                                <input type="date" id="dataFim" onchange="filtrarPorDataPersonalizada()">
+                            </div>
+                            <button class="btn-limpar-data" onclick="limparFiltroData()">Limpar datas</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="sales-list" id="salesList">
                     <div class="empty-state">
@@ -1201,6 +1888,223 @@
             </section>
         </div>
 
+        <!-- Tab Métricas -->
+        <div id="tab-metricas" class="tab-content">
+            <!-- Registro de Leads -->
+            <section class="metricas-section registro-leads-section">
+                <h3 class="section-title">📥 Registrar Leads do Dia</h3>
+                <form id="formLeads" class="form-leads">
+                    <div class="leads-input-group">
+                        <div class="lead-input-card organico">
+                            <label>🌱 Leads Orgânicos</label>
+                            <input type="number" id="leadsOrganicoInput" min="0" value="0" placeholder="0">
+                        </div>
+                        <div class="lead-input-card trafego">
+                            <label>📢 Leads Tráfego</label>
+                            <input type="number" id="leadsTrafegoInput" min="0" value="0" placeholder="0">
+                        </div>
+                        <div class="lead-input-card data">
+                            <label>📅 Data</label>
+                            <input type="date" id="leadsDataInput">
+                        </div>
+                        <button type="submit" class="btn-add-leads" id="btnLeads">
+                            ➕ Registrar Leads
+                        </button>
+                    </div>
+                </form>
+                <div class="leads-registrados-lista" id="leadsRegistradosLista">
+                    <!-- Lista de leads registrados -->
+                </div>
+            </section>
+
+            <!-- Indicador de Período -->
+            <div class="periodo-selecionado" id="periodoIndicador">
+                <span class="periodo-label">📅 Período:</span>
+                <span class="periodo-valor" id="periodoTexto">Hoje</span>
+            </div>
+
+            <!-- Cards de Taxa de Conversão -->
+            <div class="stats-container conversao-stats">
+                <div class="stat-card">
+                    <div class="icon">📥</div>
+                    <div class="value" id="metricaTotalLeadsRegistrados">0</div>
+                    <div class="label">Total Leads Recebidos</div>
+                </div>
+                <div class="stat-card organico">
+                    <div class="icon">🌱</div>
+                    <div class="value" id="metricaLeadsOrgRegistrados">0</div>
+                    <div class="label">Leads Orgânicos</div>
+                </div>
+                <div class="stat-card trafego-pago">
+                    <div class="icon">📢</div>
+                    <div class="value" id="metricaLeadsTrafRegistrados">0</div>
+                    <div class="label">Leads Tráfego</div>
+                </div>
+                <div class="stat-card conversao">
+                    <div class="icon">🎯</div>
+                    <div class="value" id="metricaTaxaConversaoGeral">0%</div>
+                    <div class="label">Taxa Conversão Geral</div>
+                </div>
+            </div>
+
+            <!-- Cards de Conversão por Origem -->
+            <div class="conversao-detalhes-container">
+                <div class="conversao-card organico">
+                    <h4>🌱 Conversão Orgânico</h4>
+                    <div class="conversao-numero" id="taxaConversaoOrganico">0%</div>
+                    <div class="conversao-info">
+                        <span><strong id="leadsOrgTotal">0</strong> leads</span>
+                        <span>→</span>
+                        <span><strong id="vendasOrgTotal">0</strong> vendas</span>
+                    </div>
+                </div>
+                <div class="conversao-card trafego">
+                    <h4>📢 Conversão Tráfego</h4>
+                    <div class="conversao-numero" id="taxaConversaoTrafego">0%</div>
+                    <div class="conversao-info">
+                        <span><strong id="leadsTrafTotal">0</strong> leads</span>
+                        <span>→</span>
+                        <span><strong id="vendasTrafTotal">0</strong> vendas</span>
+                    </div>
+                </div>
+                <div class="conversao-card cac">
+                    <h4>💸 CAC Tráfego</h4>
+                    <div class="conversao-numero" id="cacTrafegoValor">R$ 0,00</div>
+                    <div class="conversao-info">
+                        <span>Gasto: <strong id="cacGasto">R$ 0</strong></span>
+                        <span>÷</span>
+                        <span><strong id="cacVendas">0</strong> vendas</span>
+                    </div>
+                    <div class="cac-roi-info">
+                        <span>ROI: <strong id="cacROI">0%</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtros de Métricas -->
+            <div class="metricas-filtros">
+                <div class="filtro-grupo">
+                    <label>Período:</label>
+                    <div class="filtro-periodo-btns">
+                        <button class="btn-filtro-metrica active" data-periodo="hoje" onclick="filtrarMetricas('hoje')">Hoje</button>
+                        <button class="btn-filtro-metrica" data-periodo="ontem" onclick="filtrarMetricas('ontem')">Ontem</button>
+                        <button class="btn-filtro-metrica" data-periodo="7dias" onclick="filtrarMetricas('7dias')">7 dias</button>
+                        <button class="btn-filtro-metrica" data-periodo="30dias" onclick="filtrarMetricas('30dias')">30 dias</button>
+                        <button class="btn-filtro-metrica" data-periodo="mes" onclick="filtrarMetricas('mes')">Este mês</button>
+                        <button class="btn-filtro-metrica" data-periodo="todos" onclick="filtrarMetricas('todos')">Todos</button>
+                    </div>
+                </div>
+                <div class="filtro-grupo">
+                    <label>Dia específico:</label>
+                    <div class="filtro-datas">
+                        <input type="date" id="metricaDiaUnico" onchange="filtrarMetricasDia()">
+                    </div>
+                </div>
+                <div class="filtro-grupo">
+                    <label>Período personalizado:</label>
+                    <div class="filtro-datas">
+                        <input type="date" id="metricaDataInicio" onchange="filtrarMetricasPersonalizado()">
+                        <span>até</span>
+                        <input type="date" id="metricaDataFim" onchange="filtrarMetricasPersonalizado()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cards de Resumo -->
+            <div class="stats-container metricas-stats">
+                <div class="stat-card">
+                    <div class="icon">👥</div>
+                    <div class="value" id="metricaTotalLeads">0</div>
+                    <div class="label">Total de Leads</div>
+                </div>
+                <div class="stat-card organico">
+                    <div class="icon">🌱</div>
+                    <div class="value" id="metricaLeadsOrganicos">0</div>
+                    <div class="label">Leads Orgânicos</div>
+                </div>
+                <div class="stat-card trafego-pago">
+                    <div class="icon">📢</div>
+                    <div class="value" id="metricaLeadsTrafego">0</div>
+                    <div class="label">Leads Tráfego</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">💰</div>
+                    <div class="value" id="metricaFaturamento">R$ 0,00</div>
+                    <div class="label">Faturamento</div>
+                </div>
+            </div>
+
+            <!-- Comparativo Orgânico vs Tráfego -->
+            <section class="metricas-section">
+                <h3 class="section-title">📊 Comparativo: Orgânico vs Tráfego</h3>
+                <div class="comparativo-container">
+                    <div class="comparativo-barra">
+                        <div class="barra-organico" id="barraOrganico" style="width: 50%;">
+                            <span class="barra-label">🌱 Orgânico</span>
+                            <span class="barra-valor" id="barraOrganicoValor">0%</span>
+                        </div>
+                        <div class="barra-trafego" id="barraTrafego" style="width: 50%;">
+                            <span class="barra-label">📢 Tráfego</span>
+                            <span class="barra-valor" id="barraTrafegoValor">0%</span>
+                        </div>
+                    </div>
+                    <div class="comparativo-detalhes">
+                        <div class="detalhe-card organico">
+                            <h4>🌱 Orgânico</h4>
+                            <div class="detalhe-info">
+                                <p><strong>Leads:</strong> <span id="detalheOrganicoLeads">0</span></p>
+                                <p><strong>Faturamento:</strong> <span id="detalheOrganicoFat">R$ 0,00</span></p>
+                                <p><strong>Ticket Médio:</strong> <span id="detalheOrganicoTicket">R$ 0,00</span></p>
+                            </div>
+                        </div>
+                        <div class="detalhe-card trafego-pago">
+                            <h4>📢 Tráfego Pago</h4>
+                            <div class="detalhe-info">
+                                <p><strong>Vendas:</strong> <span id="detalheTrafegoLeads">0</span></p>
+                                <p><strong>Faturamento:</strong> <span id="detalheTrafegoFat">R$ 0,00</span></p>
+                                <p><strong>Ticket Médio:</strong> <span id="detalheTrafegoTicket">R$ 0,00</span></p>
+                                <p><strong>Gasto Tráfego:</strong> <span id="detalheTrafegoGasto">R$ 0,00</span></p>
+                                <p><strong>CPL (Custo/Lead):</strong> <span id="detalheTrafegoCPL">R$ 0,00</span></p>
+                                <p><strong>CAC (Custo/Venda):</strong> <span id="detalheTrafegoCAC">R$ 0,00</span></p>
+                                <p><strong>ROI Tráfego:</strong> <span id="detalheTrafegoROI">0%</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Leads por Dia -->
+            <section class="metricas-section">
+                <h3 class="section-title">📅 Leads por Dia</h3>
+                <div class="leads-por-dia-container" id="leadsPorDiaContainer">
+                    <div class="empty-state">
+                        <div class="icon">📊</div>
+                        <p>Selecione um período para ver os leads por dia.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tabela Detalhada -->
+            <section class="metricas-section">
+                <h3 class="section-title">📋 Detalhamento por Dia</h3>
+                <div class="tabela-metricas-container">
+                    <table class="tabela-metricas" id="tabelaMetricas">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Total</th>
+                                <th>🌱 Orgânico</th>
+                                <th>📢 Tráfego</th>
+                                <th>Faturamento</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaMetricasBody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
         <footer class="footer">
             <div class="stars">★ ★ ★ ★ ★</div>
             <p>Sistema de Gestão - Cabo Pereira</p>
@@ -1221,6 +2125,12 @@
         // ============================================
         let vendas = [];
         let trafego = [];
+        let leads = [];
+
+        // Variáveis para filtro de data das vendas
+        let filtroDataAtivo = 'todos';
+        let dataInicioFiltro = null;
+        let dataFimFiltro = null;
 
         // Projeções mensais fixas (valores já garantidos/contratados)
         // Formato: 'YYYY-MM': { valorFixo: numero, detalhe: 'descrição opcional' }
@@ -1240,6 +2150,7 @@
         const planoSelect = document.getElementById('planoVenda');
         const tipoSelect = document.getElementById('tipoVenda');
         const valorInput = document.getElementById('valorVenda');
+        const origemSelect = document.getElementById('origemVenda');
         const salesList = document.getElementById('salesList');
         const btnVenda = document.getElementById('btnVenda');
 
@@ -1321,6 +2232,11 @@
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
             document.getElementById(`tab-${tab}`).classList.add('active');
+
+            // Atualizar métricas quando abrir a aba
+            if (tab === 'metricas') {
+                atualizarMetricas();
+            }
         }
 
         // Nomes dos meses
@@ -1417,14 +2333,151 @@
             }
         }
 
-        async function adicionarVenda(nome, plano, tipo, valor) {
+        async function carregarLeads() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('leads')
+                    .select('*')
+                    .order('data', { ascending: false });
+
+                if (error) throw error;
+
+                leads = data || [];
+                return leads;
+            } catch (error) {
+                console.error('Erro ao carregar leads:', error);
+                // Tabela pode não existir ainda
+                leads = [];
+                return [];
+            }
+        }
+
+        async function adicionarLeads(organico, trafego, data) {
+            try {
+                const btnLeads = document.getElementById('btnLeads');
+                btnLeads.disabled = true;
+                btnLeads.innerHTML = '⏳ Salvando...';
+
+                // Verificar se já existe registro para esta data
+                const { data: existente, error: erroBusca } = await supabaseClient
+                    .from('leads')
+                    .select('*')
+                    .eq('data', data)
+                    .single();
+
+                if (existente) {
+                    // Atualizar registro existente
+                    const { error } = await supabaseClient
+                        .from('leads')
+                        .update({
+                            organico: existente.organico + organico,
+                            trafego: existente.trafego + trafego
+                        })
+                        .eq('id', existente.id);
+
+                    if (error) throw error;
+
+                    // Atualizar no array local
+                    const idx = leads.findIndex(l => l.id === existente.id);
+                    if (idx !== -1) {
+                        leads[idx].organico += organico;
+                        leads[idx].trafego += trafego;
+                    }
+                } else {
+                    // Criar novo registro
+                    const { data: novoLead, error } = await supabaseClient
+                        .from('leads')
+                        .insert([{ data, organico, trafego }])
+                        .select();
+
+                    if (error) throw error;
+
+                    leads.unshift(novoLead[0]);
+                }
+
+                renderizarLeadsRegistrados();
+                atualizarMetricas();
+                showToast('Leads registrados com sucesso!');
+                return true;
+            } catch (error) {
+                console.error('Erro ao adicionar leads:', error);
+                showToast('Erro ao salvar leads', 'error');
+                return false;
+            } finally {
+                const btnLeads = document.getElementById('btnLeads');
+                btnLeads.disabled = false;
+                btnLeads.innerHTML = '➕ Registrar Leads';
+            }
+        }
+
+        async function removerLeads(id) {
+            if (!confirm('Remover este registro de leads?')) return;
+
+            try {
+                const { error } = await supabaseClient
+                    .from('leads')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                leads = leads.filter(l => l.id !== id);
+                renderizarLeadsRegistrados();
+                atualizarMetricas();
+                showToast('Registro removido!');
+            } catch (error) {
+                console.error('Erro ao remover leads:', error);
+                showToast('Erro ao remover', 'error');
+            }
+        }
+
+        function renderizarLeadsRegistrados() {
+            const lista = document.getElementById('leadsRegistradosLista');
+
+            // Filtrar leads pelo período selecionado
+            const leadsFiltrados = getLeadsMetricas();
+
+            if (leadsFiltrados.length === 0) {
+                lista.innerHTML = '<p style="color: #8b8b8b; text-align: center; padding: 10px;">Nenhum lead registrado neste período.</p>';
+                return;
+            }
+
+            lista.innerHTML = leadsFiltrados.map(lead => {
+                const dataFormatada = new Date(lead.data + 'T12:00:00').toLocaleDateString('pt-BR');
+                const total = lead.organico + lead.trafego;
+                return `
+                    <div class="lead-registro-item">
+                        <span class="lead-registro-data">📅 ${dataFormatada}</span>
+                        <div class="lead-registro-valores">
+                            <span class="organico">🌱 ${lead.organico}</span>
+                            <span class="trafego">📢 ${lead.trafego}</span>
+                        </div>
+                        <span class="lead-registro-total">Total: ${total}</span>
+                        <button class="btn-remove-lead" onclick="removerLeads('${lead.id}')" title="Remover">✕</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getLeadsMetricas() {
+            if (!metricasDataInicio && !metricasDataFim) return leads;
+
+            return leads.filter(l => {
+                const dataLead = new Date(l.data + 'T12:00:00');
+                if (metricasDataInicio && dataLead < metricasDataInicio) return false;
+                if (metricasDataFim && dataLead > metricasDataFim) return false;
+                return true;
+            });
+        }
+
+        async function adicionarVenda(nome, plano, tipo, valor, origem) {
             try {
                 btnVenda.disabled = true;
                 btnVenda.innerHTML = '<span>⏳</span> Salvando...';
 
                 const { data, error } = await supabaseClient
                     .from('vendas')
-                    .insert([{ nome, plano, tipo, valor }])
+                    .insert([{ nome, plano, tipo, valor, origem }])
                     .select();
 
                 if (error) throw error;
@@ -1606,9 +2659,10 @@
         // FUNÇÕES DE EDIÇÃO
         // ============================================
 
-        function abrirModalEditar(id, tipoAtual, valorAtual) {
+        function abrirModalEditar(id, tipoAtual, valorAtual, origemAtual) {
             document.getElementById('editarVendaId').value = id;
             document.getElementById('editarTipo').value = tipoAtual || 'Avulsa';
+            document.getElementById('editarOrigem').value = origemAtual || 'Organico';
             // Formatar valor para exibição
             const valorFormatado = parseFloat(valorAtual).toFixed(2).replace('.', ',');
             document.getElementById('editarValor').value = valorFormatado;
@@ -1622,6 +2676,7 @@
         async function salvarEdicao() {
             const id = document.getElementById('editarVendaId').value;
             const novoTipo = document.getElementById('editarTipo').value;
+            const novaOrigem = document.getElementById('editarOrigem').value;
             const novoValor = valorParaNumero(document.getElementById('editarValor').value);
 
             if (novoValor <= 0) {
@@ -1632,7 +2687,7 @@
             try {
                 const { error } = await supabaseClient
                     .from('vendas')
-                    .update({ tipo: novoTipo, valor: novoValor })
+                    .update({ tipo: novoTipo, origem: novaOrigem, valor: novoValor })
                     .eq('id', id);
 
                 if (error) throw error;
@@ -1641,6 +2696,7 @@
                 const venda = vendas.find(v => v.id === id);
                 if (venda) {
                     venda.tipo = novoTipo;
+                    venda.origem = novaOrigem;
                     venda.valor = novoValor;
                 }
 
@@ -1809,8 +2865,30 @@
 
         function getVendasFiltradas() {
             const busca = document.getElementById('buscaNome').value.toLowerCase().trim();
-            if (!busca) return vendas;
-            return vendas.filter(v => v.nome.toLowerCase().includes(busca));
+
+            let resultado = vendas;
+
+            // Filtrar por nome
+            if (busca) {
+                resultado = resultado.filter(v => v.nome.toLowerCase().includes(busca));
+            }
+
+            // Filtrar por data
+            if (dataInicioFiltro || dataFimFiltro) {
+                resultado = resultado.filter(v => {
+                    const dataVenda = new Date(v.created_at);
+
+                    if (dataInicioFiltro && dataVenda < dataInicioFiltro) {
+                        return false;
+                    }
+                    if (dataFimFiltro && dataVenda > dataFimFiltro) {
+                        return false;
+                    }
+                    return true;
+                });
+            }
+
+            return resultado;
         }
 
         function filtrarVendas() {
@@ -1822,26 +2900,519 @@
             renderizarVendas();
         }
 
+        function filtrarPorData(tipo) {
+            filtroDataAtivo = tipo;
+
+            // Atualizar botões ativos
+            document.querySelectorAll('.btn-filtro-data').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.filtro === tipo) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Esconder calendário se não for personalizado
+            if (tipo !== 'personalizado') {
+                document.getElementById('filtroCalendario').style.display = 'none';
+                dataInicioFiltro = null;
+                dataFimFiltro = null;
+            }
+
+            // Calcular datas baseado no tipo
+            const agora = new Date();
+            const hoje = new Date(agora.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+            hoje.setHours(0, 0, 0, 0);
+
+            switch (tipo) {
+                case 'hoje':
+                    dataInicioFiltro = new Date(hoje);
+                    dataFimFiltro = new Date(hoje);
+                    dataFimFiltro.setHours(23, 59, 59, 999);
+                    break;
+                case 'ontem':
+                    dataInicioFiltro = new Date(hoje);
+                    dataInicioFiltro.setDate(dataInicioFiltro.getDate() - 1);
+                    dataFimFiltro = new Date(dataInicioFiltro);
+                    dataFimFiltro.setHours(23, 59, 59, 999);
+                    break;
+                case '7dias':
+                    dataInicioFiltro = new Date(hoje);
+                    dataInicioFiltro.setDate(dataInicioFiltro.getDate() - 6);
+                    dataFimFiltro = new Date(hoje);
+                    dataFimFiltro.setHours(23, 59, 59, 999);
+                    break;
+                case 'mes':
+                    dataInicioFiltro = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+                    dataFimFiltro = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                    dataFimFiltro.setHours(23, 59, 59, 999);
+                    break;
+                case 'todos':
+                default:
+                    dataInicioFiltro = null;
+                    dataFimFiltro = null;
+                    break;
+            }
+
+            renderizarVendas();
+        }
+
+        function toggleCalendario() {
+            const calendario = document.getElementById('filtroCalendario');
+            const isVisible = calendario.style.display !== 'none';
+
+            if (isVisible) {
+                calendario.style.display = 'none';
+                filtrarPorData('todos');
+            } else {
+                calendario.style.display = 'block';
+                filtroDataAtivo = 'personalizado';
+
+                // Atualizar botões
+                document.querySelectorAll('.btn-filtro-data').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.filtro === 'personalizado') {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+        }
+
+        function filtrarPorDataPersonalizada() {
+            const dataInicioInput = document.getElementById('dataInicio').value;
+            const dataFimInput = document.getElementById('dataFim').value;
+
+            if (dataInicioInput) {
+                dataInicioFiltro = new Date(dataInicioInput + 'T00:00:00');
+            } else {
+                dataInicioFiltro = null;
+            }
+
+            if (dataFimInput) {
+                dataFimFiltro = new Date(dataFimInput + 'T23:59:59');
+            } else {
+                dataFimFiltro = null;
+            }
+
+            renderizarVendas();
+        }
+
+        function limparFiltroData() {
+            document.getElementById('dataInicio').value = '';
+            document.getElementById('dataFim').value = '';
+            dataInicioFiltro = null;
+            dataFimFiltro = null;
+            document.getElementById('filtroCalendario').style.display = 'none';
+            filtrarPorData('todos');
+        }
+
+        // ============================================
+        // MÉTRICAS
+        // ============================================
+
+        let metricasPeriodo = 'hoje';
+        let metricasDataInicio = null;
+        let metricasDataFim = null;
+
+        function filtrarMetricas(periodo) {
+            metricasPeriodo = periodo;
+
+            // Atualizar botões ativos
+            document.querySelectorAll('.btn-filtro-metrica').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.periodo === periodo) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Limpar campos de data personalizada
+            document.getElementById('metricaDataInicio').value = '';
+            document.getElementById('metricaDataFim').value = '';
+            document.getElementById('metricaDiaUnico').value = '';
+
+            // Calcular datas
+            const agora = new Date();
+            const hoje = new Date(agora.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+            hoje.setHours(0, 0, 0, 0);
+
+            // Textos do período
+            const periodosTexto = {
+                'hoje': 'Hoje (' + hoje.toLocaleDateString('pt-BR') + ')',
+                'ontem': 'Ontem',
+                '7dias': 'Últimos 7 dias',
+                '30dias': 'Últimos 30 dias',
+                'mes': 'Este mês',
+                'todos': 'Todo o período'
+            };
+            document.getElementById('periodoTexto').textContent = periodosTexto[periodo] || periodo;
+
+            switch (periodo) {
+                case 'hoje':
+                    metricasDataInicio = new Date(hoje);
+                    metricasDataFim = new Date(hoje);
+                    metricasDataFim.setHours(23, 59, 59, 999);
+                    break;
+                case 'ontem':
+                    metricasDataInicio = new Date(hoje);
+                    metricasDataInicio.setDate(metricasDataInicio.getDate() - 1);
+                    metricasDataFim = new Date(metricasDataInicio);
+                    metricasDataFim.setHours(23, 59, 59, 999);
+                    // Atualizar texto com a data
+                    document.getElementById('periodoTexto').textContent = 'Ontem (' + metricasDataInicio.toLocaleDateString('pt-BR') + ')';
+                    break;
+                case '7dias':
+                    metricasDataInicio = new Date(hoje);
+                    metricasDataInicio.setDate(metricasDataInicio.getDate() - 6);
+                    metricasDataFim = new Date(hoje);
+                    metricasDataFim.setHours(23, 59, 59, 999);
+                    break;
+                case '30dias':
+                    metricasDataInicio = new Date(hoje);
+                    metricasDataInicio.setDate(metricasDataInicio.getDate() - 29);
+                    metricasDataFim = new Date(hoje);
+                    metricasDataFim.setHours(23, 59, 59, 999);
+                    break;
+                case 'mes':
+                    metricasDataInicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+                    metricasDataFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                    metricasDataFim.setHours(23, 59, 59, 999);
+                    break;
+                case 'todos':
+                default:
+                    metricasDataInicio = null;
+                    metricasDataFim = null;
+                    break;
+            }
+
+            atualizarMetricas();
+        }
+
+        function filtrarMetricasDia() {
+            const diaInput = document.getElementById('metricaDiaUnico').value;
+
+            if (!diaInput) return;
+
+            // Remover active de todos os botões
+            document.querySelectorAll('.btn-filtro-metrica').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Limpar campos de período
+            document.getElementById('metricaDataInicio').value = '';
+            document.getElementById('metricaDataFim').value = '';
+
+            metricasPeriodo = 'dia';
+            metricasDataInicio = new Date(diaInput + 'T00:00:00');
+            metricasDataFim = new Date(diaInput + 'T23:59:59');
+
+            // Atualizar texto do período
+            const dataFormatada = new Date(diaInput + 'T12:00:00').toLocaleDateString('pt-BR', {
+                weekday: 'long',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            document.getElementById('periodoTexto').textContent = dataFormatada;
+
+            atualizarMetricas();
+        }
+
+        function filtrarMetricasPersonalizado() {
+            const dataInicioInput = document.getElementById('metricaDataInicio').value;
+            const dataFimInput = document.getElementById('metricaDataFim').value;
+
+            // Limpar campo de dia único
+            document.getElementById('metricaDiaUnico').value = '';
+
+            // Remover active de todos os botões
+            document.querySelectorAll('.btn-filtro-metrica').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            metricasPeriodo = 'personalizado';
+
+            if (dataInicioInput) {
+                metricasDataInicio = new Date(dataInicioInput + 'T00:00:00');
+            } else {
+                metricasDataInicio = null;
+            }
+
+            if (dataFimInput) {
+                metricasDataFim = new Date(dataFimInput + 'T23:59:59');
+            } else {
+                metricasDataFim = null;
+            }
+
+            // Atualizar texto do período
+            if (dataInicioInput && dataFimInput) {
+                const inicio = new Date(dataInicioInput + 'T12:00:00').toLocaleDateString('pt-BR');
+                const fim = new Date(dataFimInput + 'T12:00:00').toLocaleDateString('pt-BR');
+                if (inicio === fim) {
+                    document.getElementById('periodoTexto').textContent = inicio;
+                } else {
+                    document.getElementById('periodoTexto').textContent = `${inicio} até ${fim}`;
+                }
+            } else if (dataInicioInput) {
+                document.getElementById('periodoTexto').textContent = `A partir de ${new Date(dataInicioInput + 'T12:00:00').toLocaleDateString('pt-BR')}`;
+            } else if (dataFimInput) {
+                document.getElementById('periodoTexto').textContent = `Até ${new Date(dataFimInput + 'T12:00:00').toLocaleDateString('pt-BR')}`;
+            } else {
+                document.getElementById('periodoTexto').textContent = 'Selecione um período';
+            }
+
+            atualizarMetricas();
+        }
+
+        function getVendasMetricas() {
+            if (!metricasDataInicio && !metricasDataFim) return vendas;
+
+            return vendas.filter(v => {
+                const dataVenda = new Date(v.created_at);
+                if (metricasDataInicio && dataVenda < metricasDataInicio) return false;
+                if (metricasDataFim && dataVenda > metricasDataFim) return false;
+                return true;
+            });
+        }
+
+        function getTrafegoMetricas() {
+            if (!metricasDataInicio && !metricasDataFim) return trafego;
+
+            return trafego.filter(t => {
+                const dataTrafego = new Date(t.created_at);
+                if (metricasDataInicio && dataTrafego < metricasDataInicio) return false;
+                if (metricasDataFim && dataTrafego > metricasDataFim) return false;
+                return true;
+            });
+        }
+
+        function atualizarMetricas() {
+            const vendasPeriodo = getVendasMetricas();
+            const trafegoPeriodo = getTrafegoMetricas();
+            const leadsPeriodo = getLeadsMetricas();
+
+            // Vendas (conversões)
+            const totalVendas = vendasPeriodo.length;
+            const vendasOrganicas = vendasPeriodo.filter(v => v.origem === 'Organico' || !v.origem).length;
+            const vendasTrafego = vendasPeriodo.filter(v => v.origem === 'Trafego').length;
+            const faturamentoTotal = vendasPeriodo.reduce((acc, v) => acc + parseFloat(v.valor), 0);
+            const faturamentoOrganico = vendasPeriodo.filter(v => v.origem === 'Organico' || !v.origem).reduce((acc, v) => acc + parseFloat(v.valor), 0);
+            const faturamentoTrafego = vendasPeriodo.filter(v => v.origem === 'Trafego').reduce((acc, v) => acc + parseFloat(v.valor), 0);
+            const gastoTrafego = trafegoPeriodo.reduce((acc, t) => acc + parseFloat(t.valor), 0);
+
+            // Leads registrados
+            const totalLeadsRegistrados = leadsPeriodo.reduce((acc, l) => acc + l.organico + l.trafego, 0);
+            const leadsOrgRegistrados = leadsPeriodo.reduce((acc, l) => acc + l.organico, 0);
+            const leadsTrafRegistrados = leadsPeriodo.reduce((acc, l) => acc + l.trafego, 0);
+
+            // Taxas de conversão
+            const taxaConversaoGeral = totalLeadsRegistrados > 0 ? (totalVendas / totalLeadsRegistrados) * 100 : 0;
+            const taxaConversaoOrganico = leadsOrgRegistrados > 0 ? (vendasOrganicas / leadsOrgRegistrados) * 100 : 0;
+            const taxaConversaoTrafego = leadsTrafRegistrados > 0 ? (vendasTrafego / leadsTrafRegistrados) * 100 : 0;
+
+            // CAC (Custo de Aquisição de Cliente) - apenas para tráfego
+            // CAC = Gasto em tráfego / Vendas vindas do tráfego
+            // Só calcula se tiver gasto E vendas no período
+            const temGastoNoPeriodo = gastoTrafego > 0;
+            const temVendasTrafego = vendasTrafego > 0;
+            const cacTrafego = (temGastoNoPeriodo && temVendasTrafego) ? gastoTrafego / vendasTrafego : null;
+
+            // ROI do Tráfego = ((Faturamento Tráfego - Gasto Tráfego) / Gasto Tráfego) * 100
+            const roiTrafego = temGastoNoPeriodo ? ((faturamentoTrafego - gastoTrafego) / gastoTrafego) * 100 : null;
+
+            // Atualizar cards de leads registrados
+            document.getElementById('metricaTotalLeadsRegistrados').textContent = totalLeadsRegistrados;
+            document.getElementById('metricaLeadsOrgRegistrados').textContent = leadsOrgRegistrados;
+            document.getElementById('metricaLeadsTrafRegistrados').textContent = leadsTrafRegistrados;
+            document.getElementById('metricaTaxaConversaoGeral').textContent = `${taxaConversaoGeral.toFixed(1)}%`;
+
+            // Atualizar cards de conversão por origem
+            document.getElementById('taxaConversaoOrganico').textContent = `${taxaConversaoOrganico.toFixed(1)}%`;
+            document.getElementById('leadsOrgTotal').textContent = leadsOrgRegistrados;
+            document.getElementById('vendasOrgTotal').textContent = vendasOrganicas;
+
+            document.getElementById('taxaConversaoTrafego').textContent = `${taxaConversaoTrafego.toFixed(1)}%`;
+            document.getElementById('leadsTrafTotal').textContent = leadsTrafRegistrados;
+            document.getElementById('vendasTrafTotal').textContent = vendasTrafego;
+
+            // Atualizar card de CAC
+            if (cacTrafego !== null) {
+                document.getElementById('cacTrafegoValor').textContent = formatarMoeda(cacTrafego);
+            } else if (!temGastoNoPeriodo) {
+                document.getElementById('cacTrafegoValor').textContent = 'Sem gasto';
+            } else if (!temVendasTrafego) {
+                document.getElementById('cacTrafegoValor').textContent = 'Sem vendas';
+            }
+            document.getElementById('cacGasto').textContent = temGastoNoPeriodo ? formatarMoeda(gastoTrafego) : 'R$ 0,00';
+            document.getElementById('cacVendas').textContent = vendasTrafego;
+            document.getElementById('cacROI').textContent = roiTrafego !== null ? `${roiTrafego.toFixed(1)}%` : '--';
+
+            // Atualizar cards de resumo de vendas
+            document.getElementById('metricaTotalLeads').textContent = totalVendas;
+            document.getElementById('metricaLeadsOrganicos').textContent = vendasOrganicas;
+            document.getElementById('metricaLeadsTrafego').textContent = vendasTrafego;
+            document.getElementById('metricaFaturamento').textContent = formatarMoeda(faturamentoTotal);
+
+            // Atualizar barra comparativa (baseada em vendas)
+            const percOrganico = totalVendas > 0 ? (vendasOrganicas / totalVendas) * 100 : 50;
+            const percTrafego = totalVendas > 0 ? (vendasTrafego / totalVendas) * 100 : 50;
+
+            document.getElementById('barraOrganico').style.width = `${Math.max(percOrganico, 10)}%`;
+            document.getElementById('barraTrafego').style.width = `${Math.max(percTrafego, 10)}%`;
+            document.getElementById('barraOrganicoValor').textContent = `${percOrganico.toFixed(0)}%`;
+            document.getElementById('barraTrafegoValor').textContent = `${percTrafego.toFixed(0)}%`;
+
+            // Atualizar detalhes
+            document.getElementById('detalheOrganicoLeads').textContent = vendasOrganicas;
+            document.getElementById('detalheOrganicoFat').textContent = formatarMoeda(faturamentoOrganico);
+            document.getElementById('detalheOrganicoTicket').textContent = formatarMoeda(vendasOrganicas > 0 ? faturamentoOrganico / vendasOrganicas : 0);
+
+            document.getElementById('detalheTrafegoLeads').textContent = vendasTrafego;
+            document.getElementById('detalheTrafegoFat').textContent = formatarMoeda(faturamentoTrafego);
+            document.getElementById('detalheTrafegoTicket').textContent = formatarMoeda(vendasTrafego > 0 ? faturamentoTrafego / vendasTrafego : 0);
+            document.getElementById('detalheTrafegoGasto').textContent = temGastoNoPeriodo ? formatarMoeda(gastoTrafego) : 'Sem gasto';
+            document.getElementById('detalheTrafegoCPL').textContent = (temGastoNoPeriodo && leadsTrafRegistrados > 0) ? formatarMoeda(gastoTrafego / leadsTrafRegistrados) : '--';
+            document.getElementById('detalheTrafegoCAC').textContent = cacTrafego !== null ? formatarMoeda(cacTrafego) : '--';
+            document.getElementById('detalheTrafegoROI').textContent = roiTrafego !== null ? `${roiTrafego.toFixed(1)}%` : '--';
+
+            // Renderizar leads registrados
+            renderizarLeadsRegistrados();
+
+            // Renderizar vendas por dia
+            renderizarLeadsPorDia(vendasPeriodo);
+
+            // Renderizar tabela
+            renderizarTabelaMetricas(vendasPeriodo);
+        }
+
+        function renderizarLeadsPorDia(vendasPeriodo) {
+            const container = document.getElementById('leadsPorDiaContainer');
+
+            if (vendasPeriodo.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">📊</div><p>Nenhum lead neste período.</p></div>';
+                return;
+            }
+
+            // Agrupar por dia
+            const porDia = {};
+            vendasPeriodo.forEach(v => {
+                const data = new Date(v.created_at);
+                const dataStr = data.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+                if (!porDia[dataStr]) {
+                    porDia[dataStr] = { organico: 0, trafego: 0, total: 0 };
+                }
+                porDia[dataStr].total++;
+                if (v.origem === 'Trafego') {
+                    porDia[dataStr].trafego++;
+                } else {
+                    porDia[dataStr].organico++;
+                }
+            });
+
+            // Ordenar por data (mais recente primeiro)
+            const diasOrdenados = Object.keys(porDia).sort((a, b) => {
+                const [diaA, mesA, anoA] = a.split('/');
+                const [diaB, mesB, anoB] = b.split('/');
+                return new Date(anoB, mesB - 1, diaB) - new Date(anoA, mesA - 1, diaA);
+            });
+
+            // Encontrar o máximo para escala
+            const maxTotal = Math.max(...Object.values(porDia).map(d => d.total));
+
+            container.innerHTML = diasOrdenados.map(dia => {
+                const dados = porDia[dia];
+                const percOrganico = dados.total > 0 ? (dados.organico / dados.total) * 100 : 0;
+                const percTrafego = dados.total > 0 ? (dados.trafego / dados.total) * 100 : 0;
+                const larguraTotal = (dados.total / maxTotal) * 100;
+
+                return `
+                    <div class="dia-item">
+                        <div class="dia-data">${dia}</div>
+                        <div class="dia-barras" style="width: ${larguraTotal}%;">
+                            ${dados.organico > 0 ? `<div class="dia-barra-organico" style="width: ${percOrganico}%;"><span>${dados.organico}</span></div>` : ''}
+                            ${dados.trafego > 0 ? `<div class="dia-barra-trafego" style="width: ${percTrafego}%;"><span>${dados.trafego}</span></div>` : ''}
+                        </div>
+                        <div class="dia-total">${dados.total} lead${dados.total !== 1 ? 's' : ''}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderizarTabelaMetricas(vendasPeriodo) {
+            const tbody = document.getElementById('tabelaMetricasBody');
+
+            if (vendasPeriodo.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #8b8b8b;">Nenhum dado neste período</td></tr>';
+                return;
+            }
+
+            // Agrupar por dia
+            const porDia = {};
+            vendasPeriodo.forEach(v => {
+                const data = new Date(v.created_at);
+                const dataStr = data.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+                if (!porDia[dataStr]) {
+                    porDia[dataStr] = { organico: 0, trafego: 0, total: 0, faturamento: 0 };
+                }
+                porDia[dataStr].total++;
+                porDia[dataStr].faturamento += parseFloat(v.valor);
+                if (v.origem === 'Trafego') {
+                    porDia[dataStr].trafego++;
+                } else {
+                    porDia[dataStr].organico++;
+                }
+            });
+
+            // Ordenar por data (mais recente primeiro)
+            const diasOrdenados = Object.keys(porDia).sort((a, b) => {
+                const [diaA, mesA, anoA] = a.split('/');
+                const [diaB, mesB, anoB] = b.split('/');
+                return new Date(anoB, mesB - 1, diaB) - new Date(anoA, mesA - 1, diaA);
+            });
+
+            tbody.innerHTML = diasOrdenados.map(dia => {
+                const dados = porDia[dia];
+                return `
+                    <tr>
+                        <td>${dia}</td>
+                        <td>${dados.total}</td>
+                        <td class="valor-organico">${dados.organico}</td>
+                        <td class="valor-trafego">${dados.trafego}</td>
+                        <td>${formatarMoeda(dados.faturamento)}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
         function renderizarVendas() {
             const vendasFiltradas = getVendasFiltradas();
             const totalVendas = vendas.length;
             const totalFiltradas = vendasFiltradas.length;
 
+            const buscaAtiva = document.getElementById('buscaNome').value.trim();
+            const filtroDataAtual = filtroDataAtivo !== 'todos';
+
             if (vendas.length === 0) {
                 salesList.innerHTML = '<div class="empty-state"><div class="icon">🎯</div><p>Nenhuma venda registrada ainda.</p></div>';
             } else if (vendasFiltradas.length === 0) {
-                salesList.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p>Nenhum cliente encontrado com esse nome.</p></div>';
+                let mensagem = 'Nenhuma venda encontrada';
+                if (buscaAtiva && filtroDataAtual) {
+                    mensagem = 'Nenhuma venda encontrada para este nome e período.';
+                } else if (buscaAtiva) {
+                    mensagem = 'Nenhum cliente encontrado com esse nome.';
+                } else if (filtroDataAtual) {
+                    mensagem = 'Nenhuma venda encontrada neste período.';
+                }
+                salesList.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><p>${mensagem}</p></div>`;
             } else {
                 salesList.innerHTML = vendasFiltradas.map(venda => `
                     <div class="sale-item ${venda.tipo === 'Recorrente' ? 'recorrente' : ''}">
                         <div class="sale-info">
-                            <div class="sale-name">🎖️ ${venda.nome}</div>
+                            <div class="sale-name">🎖️ ${venda.nome} ${venda.origem === 'Trafego' ? '<span class="origem-badge trafego">📢 Tráfego</span>' : '<span class="origem-badge organico">🌱 Orgânico</span>'}</div>
                             <div class="sale-plan">📋 ${venda.plano || 'Não informado'} ${venda.tipo === 'Recorrente' ? '<span class="tipo-badge recorrente">🔄 Recorrente</span>' : '<span class="tipo-badge avulsa">💳 Avulsa</span>'}</div>
                             <div class="sale-date">📅 ${formatarDataHora(venda.created_at)}</div>
                         </div>
                         <div class="sale-value">${formatarMoeda(parseFloat(venda.valor))}</div>
                         <div class="sale-actions">
-                            <button class="btn-edit" onclick="abrirModalEditar('${venda.id}', '${venda.tipo || 'Avulsa'}', '${venda.valor}')" title="Editar">✏️</button>
+                            <button class="btn-edit" onclick="abrirModalEditar('${venda.id}', '${venda.tipo || 'Avulsa'}', '${venda.valor}', '${venda.origem || 'Organico'}')" title="Editar">✏️</button>
                             <button class="btn-remove" onclick="removerVenda('${venda.id}')" title="Remover">✕</button>
                         </div>
                     </div>
@@ -1849,8 +3420,8 @@
             }
 
             // Atualizar contador com info de filtro
-            const buscaAtiva = document.getElementById('buscaNome').value.trim();
-            if (buscaAtiva && totalVendas > 0) {
+            const temFiltroAtivo = buscaAtiva || filtroDataAtual;
+            if (temFiltroAtivo && totalVendas > 0) {
                 document.getElementById('salesCount').textContent = `${totalFiltradas} de ${totalVendas} registro${totalVendas !== 1 ? 's' : ''}`;
             } else {
                 document.getElementById('salesCount').textContent = `${totalVendas} registro${totalVendas !== 1 ? 's' : ''}`;
@@ -1924,14 +3495,16 @@
             const plano = planoSelect.value;
             const tipo = tipoSelect.value;
             const valor = valorParaNumero(valorInput.value);
+            const origem = origemSelect.value;
 
-            if (nome && plano && tipo && valor > 0) {
-                const success = await adicionarVenda(nome, plano, tipo, valor);
+            if (nome && plano && tipo && valor > 0 && origem) {
+                const success = await adicionarVenda(nome, plano, tipo, valor, origem);
                 if (success) {
                     nomeInput.value = '';
                     planoSelect.value = '';
                     tipoSelect.value = 'Avulsa';
                     valorInput.value = '';
+                    origemSelect.value = 'Organico';
                     nomeInput.focus();
                 }
             }
@@ -1949,6 +3522,24 @@
                     valorTrafegoInput.value = '';
                     descricaoTrafegoInput.focus();
                 }
+            }
+        });
+
+        // Event listener para formulário de leads
+        document.getElementById('formLeads').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const organico = parseInt(document.getElementById('leadsOrganicoInput').value) || 0;
+            const trafego = parseInt(document.getElementById('leadsTrafegoInput').value) || 0;
+            const data = document.getElementById('leadsDataInput').value;
+
+            if ((organico > 0 || trafego > 0) && data) {
+                const success = await adicionarLeads(organico, trafego, data);
+                if (success) {
+                    document.getElementById('leadsOrganicoInput').value = '0';
+                    document.getElementById('leadsTrafegoInput').value = '0';
+                }
+            } else {
+                showToast('Preencha a quantidade de leads e a data', 'error');
             }
         });
 
@@ -1983,11 +3574,15 @@
         async function init() {
             showLoading();
             try {
-                await Promise.all([carregarVendas(), carregarTrafego()]);
+                await Promise.all([carregarVendas(), carregarTrafego(), carregarLeads()]);
                 renderizarVendas();
                 renderizarTrafego();
                 setupRealtimeSubscriptions();
                 atualizarProjecao(); // Inicializar projeção mensal
+
+                // Definir data padrão do input de leads como hoje
+                const hoje = new Date().toISOString().split('T')[0];
+                document.getElementById('leadsDataInput').value = hoje;
             } catch (error) {
                 console.error('Erro na inicialização:', error);
                 showToast('Erro ao conectar com o servidor', 'error');
