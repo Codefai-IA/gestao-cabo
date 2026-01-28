@@ -629,6 +629,90 @@
         }
 
         /* Seção de Lembretes */
+        /* Projeção Mensal */
+        .projecao-section {
+            background: linear-gradient(145deg, #2d3a4a 0%, #1f2a3a 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 2px solid #3498db;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        .projecao-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .projecao-title h2 {
+            color: #3498db;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .projecao-filtro {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .projecao-filtro select {
+            padding: 8px 15px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background: #1a2e3a;
+            color: #e8e8e8;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .projecao-filtro select:focus {
+            outline: none;
+            border-color: #5dade2;
+        }
+
+        .projecao-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: linear-gradient(90deg, #1f2a3a 0%, #162030 100%);
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+
+        .projecao-info h3 {
+            color: #5dade2;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .projecao-info p {
+            color: #85c1e9;
+            font-size: 0.85rem;
+        }
+
+        .projecao-valor {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3498db;
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .projecao-detalhe {
+            font-size: 0.8rem;
+            color: #85c1e9;
+            margin-top: 5px;
+        }
+
         .lembretes-section {
             background: linear-gradient(145deg, #4a3d2d 0%, #3d3020 100%);
             padding: 20px;
@@ -934,6 +1018,40 @@
                 </div>
             </div>
 
+            <!-- Projeção Mensal -->
+            <section class="projecao-section" id="projecaoSection">
+                <div class="projecao-title">
+                    <h2>📅 Projeção Mensal</h2>
+                    <div class="projecao-filtro">
+                        <select id="filtroMesProjecao" onchange="atualizarProjecao()">
+                            <option value="2025-01">Janeiro 2025</option>
+                            <option value="2025-02" selected>Fevereiro 2025</option>
+                            <option value="2025-03">Março 2025</option>
+                            <option value="2025-04">Abril 2025</option>
+                            <option value="2025-05">Maio 2025</option>
+                            <option value="2025-06">Junho 2025</option>
+                            <option value="2025-07">Julho 2025</option>
+                            <option value="2025-08">Agosto 2025</option>
+                            <option value="2025-09">Setembro 2025</option>
+                            <option value="2025-10">Outubro 2025</option>
+                            <option value="2025-11">Novembro 2025</option>
+                            <option value="2025-12">Dezembro 2025</option>
+                            <option value="2026-01">Janeiro 2026</option>
+                            <option value="2026-02">Fevereiro 2026</option>
+                            <option value="2026-03">Março 2026</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="projecao-card">
+                    <div class="projecao-info">
+                        <h3 id="projecaoMesNome">Fevereiro 2025</h3>
+                        <p>Valor previsto para entrar neste mês</p>
+                        <div class="projecao-detalhe" id="projecaoDetalhe"></div>
+                    </div>
+                    <div class="projecao-valor" id="projecaoValor">R$ 0,00</div>
+                </div>
+            </section>
+
             <!-- Lembretes de Renovação -->
             <section class="lembretes-section hidden" id="lembretesSection">
                 <div class="lembretes-title">
@@ -1087,6 +1205,16 @@
         let vendas = [];
         let trafego = [];
 
+        // Projeções mensais fixas (valores já garantidos/contratados)
+        // Formato: 'YYYY-MM': { valorFixo: numero, detalhe: 'descrição opcional' }
+        const projecoesFixas = {
+            '2025-02': {
+                valorFixo: 8495.45,
+                detalhe: 'R$ 7.636,76 + R$ 858,69'
+            }
+        };
+
+
         // ============================================
         // ELEMENTOS DOM
         // ============================================
@@ -1176,6 +1304,32 @@
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
             document.getElementById(`tab-${tab}`).classList.add('active');
+        }
+
+        // Nomes dos meses
+        const nomesMeses = {
+            '01': 'Janeiro', '02': 'Fevereiro', '03': 'Março', '04': 'Abril',
+            '05': 'Maio', '06': 'Junho', '07': 'Julho', '08': 'Agosto',
+            '09': 'Setembro', '10': 'Outubro', '11': 'Novembro', '12': 'Dezembro'
+        };
+
+        function atualizarProjecao() {
+            const select = document.getElementById('filtroMesProjecao');
+            const mesAno = select.value; // formato: 'YYYY-MM'
+            const [ano, mes] = mesAno.split('-');
+
+            const nomeMes = nomesMeses[mes];
+            document.getElementById('projecaoMesNome').textContent = `${nomeMes} ${ano}`;
+
+            const projecao = projecoesFixas[mesAno];
+
+            if (projecao) {
+                document.getElementById('projecaoValor').textContent = formatarMoeda(projecao.valorFixo);
+                document.getElementById('projecaoDetalhe').textContent = projecao.detalhe || '';
+            } else {
+                document.getElementById('projecaoValor').textContent = 'R$ 0,00';
+                document.getElementById('projecaoDetalhe').textContent = 'Sem projeção definida';
+            }
         }
 
         // ============================================
@@ -1639,6 +1793,7 @@
 
             atualizarEstatisticas();
             renderizarLembretes();
+            atualizarProjecao();
         }
 
         function renderizarTrafego() {
@@ -1732,6 +1887,7 @@
                 renderizarVendas();
                 renderizarTrafego();
                 setupRealtimeSubscriptions();
+                atualizarProjecao(); // Inicializar projeção mensal
             } catch (error) {
                 console.error('Erro na inicialização:', error);
                 showToast('Erro ao conectar com o servidor', 'error');
