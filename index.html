@@ -1024,27 +1024,24 @@
                     <h2>📅 Projeção Mensal</h2>
                     <div class="projecao-filtro">
                         <select id="filtroMesProjecao" onchange="atualizarProjecao()">
-                            <option value="2025-01">Janeiro 2025</option>
-                            <option value="2025-02" selected>Fevereiro 2025</option>
-                            <option value="2025-03">Março 2025</option>
-                            <option value="2025-04">Abril 2025</option>
-                            <option value="2025-05">Maio 2025</option>
-                            <option value="2025-06">Junho 2025</option>
-                            <option value="2025-07">Julho 2025</option>
-                            <option value="2025-08">Agosto 2025</option>
-                            <option value="2025-09">Setembro 2025</option>
-                            <option value="2025-10">Outubro 2025</option>
-                            <option value="2025-11">Novembro 2025</option>
-                            <option value="2025-12">Dezembro 2025</option>
-                            <option value="2026-01">Janeiro 2026</option>
+                            <option value="2026-01" selected>Janeiro 2026</option>
                             <option value="2026-02">Fevereiro 2026</option>
                             <option value="2026-03">Março 2026</option>
+                            <option value="2026-04">Abril 2026</option>
+                            <option value="2026-05">Maio 2026</option>
+                            <option value="2026-06">Junho 2026</option>
+                            <option value="2026-07">Julho 2026</option>
+                            <option value="2026-08">Agosto 2026</option>
+                            <option value="2026-09">Setembro 2026</option>
+                            <option value="2026-10">Outubro 2026</option>
+                            <option value="2026-11">Novembro 2026</option>
+                            <option value="2026-12">Dezembro 2026</option>
                         </select>
                     </div>
                 </div>
                 <div class="projecao-card">
                     <div class="projecao-info">
-                        <h3 id="projecaoMesNome">Fevereiro 2025</h3>
+                        <h3 id="projecaoMesNome">Janeiro 2026</h3>
                         <p>Valor previsto para entrar neste mês</p>
                         <div class="projecao-detalhe" id="projecaoDetalhe"></div>
                     </div>
@@ -1123,6 +1120,26 @@
 
         <!-- Tab Tráfego -->
         <div id="tab-trafego" class="tab-content">
+            <!-- Filtro de Mês -->
+            <div class="filtro-mes-trafego" style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px; background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%); padding: 15px 20px; border-radius: 10px; border: 2px solid #5c7a5c;">
+                <label style="color: #c4a64a; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Filtrar por Mês:</label>
+                <select id="filtroMesTrafego" onchange="renderizarTrafego()" style="padding: 10px 15px; border: 2px solid #5c7a5c; border-radius: 8px; background: #1a2e1a; color: #e8e8e8; font-size: 0.95rem; cursor: pointer;">
+                    <option value="">Todos os meses</option>
+                    <option value="2026-01">Janeiro 2026</option>
+                    <option value="2026-02">Fevereiro 2026</option>
+                    <option value="2026-03">Março 2026</option>
+                    <option value="2026-04">Abril 2026</option>
+                    <option value="2026-05">Maio 2026</option>
+                    <option value="2026-06">Junho 2026</option>
+                    <option value="2026-07">Julho 2026</option>
+                    <option value="2026-08">Agosto 2026</option>
+                    <option value="2026-09">Setembro 2026</option>
+                    <option value="2026-10">Outubro 2026</option>
+                    <option value="2026-11">Novembro 2026</option>
+                    <option value="2026-12">Dezembro 2026</option>
+                </select>
+            </div>
+
             <!-- Stats Cards Tráfego -->
             <div class="stats-container">
                 <div class="stat-card negative">
@@ -1208,7 +1225,7 @@
         // Projeções mensais fixas (valores já garantidos/contratados)
         // Formato: 'YYYY-MM': { valorFixo: numero, detalhe: 'descrição opcional' }
         const projecoesFixas = {
-            '2025-02': {
+            '2026-01': {
                 valorFixo: 8495.45,
                 detalhe: 'R$ 7.636,76 + R$ 858,69'
             }
@@ -1321,15 +1338,59 @@
             const nomeMes = nomesMeses[mes];
             document.getElementById('projecaoMesNome').textContent = `${nomeMes} ${ano}`;
 
-            const projecao = projecoesFixas[mesAno];
+            // Calcular valor das vendas recorrentes do mês selecionado (apenas a partir de hoje)
+            let valorRecorrentes = 0;
+            let qtdRecorrentes = 0;
 
-            if (projecao) {
-                document.getElementById('projecaoValor').textContent = formatarMoeda(projecao.valorFixo);
-                document.getElementById('projecaoDetalhe').textContent = projecao.detalhe || '';
-            } else {
-                document.getElementById('projecaoValor').textContent = 'R$ 0,00';
-                document.getElementById('projecaoDetalhe').textContent = 'Sem projeção definida';
+            // Data de hoje no fuso de São Paulo (início do dia)
+            const hoje = new Date();
+            const hojeLocal = hoje.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                timeZone: 'America/Sao_Paulo'
+            });
+            const [diaHoje, mesHoje, anoHoje] = hojeLocal.split('/');
+            const dataHojeNum = parseInt(anoHoje + mesHoje + diaHoje); // 20260128
+
+            vendas.forEach(venda => {
+                if (venda.tipo === 'Recorrente') {
+                    const dataVenda = new Date(venda.created_at);
+                    const dataLocal = dataVenda.toLocaleDateString('pt-BR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        timeZone: 'America/Sao_Paulo'
+                    });
+                    const [dia, mesVenda, anoVenda] = dataLocal.split('/');
+                    const mesAnoVenda = `${anoVenda}-${mesVenda}`;
+                    const dataVendaNum = parseInt(anoVenda + mesVenda + dia); // 20260128
+
+                    // Só conta se for do mês selecionado E a partir de hoje
+                    if (mesAnoVenda === mesAno && dataVendaNum >= dataHojeNum) {
+                        valorRecorrentes += venda.valor;
+                        qtdRecorrentes++;
+                    }
+                }
+            });
+
+            // Somar com projeções fixas se existirem
+            const projecaoFixa = projecoesFixas[mesAno];
+            const valorFixo = projecaoFixa ? projecaoFixa.valorFixo : 0;
+            const valorTotal = valorRecorrentes + valorFixo;
+
+            document.getElementById('projecaoValor').textContent = formatarMoeda(valorTotal);
+
+            // Montar detalhe
+            let detalhes = [];
+            if (qtdRecorrentes > 0) {
+                detalhes.push(`${qtdRecorrentes} venda${qtdRecorrentes > 1 ? 's' : ''} recorrente${qtdRecorrentes > 1 ? 's' : ''}: ${formatarMoeda(valorRecorrentes)}`);
             }
+            if (projecaoFixa && projecaoFixa.detalhe) {
+                detalhes.push(projecaoFixa.detalhe);
+            }
+
+            document.getElementById('projecaoDetalhe').textContent = detalhes.length > 0 ? detalhes.join(' | ') : 'Nenhuma projeção para este mês';
         }
 
         // ============================================
@@ -1670,7 +1731,6 @@
             const qtdVendas = vendas.length;
             const media = qtdVendas > 0 ? totalVendas / qtdVendas : 0;
             const lucro = totalVendas - totalTrafegoVal;
-            const roi = totalTrafegoVal > 0 ? ((totalVendas - totalTrafegoVal) / totalTrafegoVal * 100) : 0;
 
             document.getElementById('totalVendas').textContent = formatarMoeda(totalVendas);
             document.getElementById('qtdVendas').textContent = qtdVendas;
@@ -1678,13 +1738,18 @@
             document.getElementById('lucroLiquido').textContent = formatarMoeda(lucro);
             document.getElementById('salesCount').textContent = `${qtdVendas} registro${qtdVendas !== 1 ? 's' : ''}`;
 
+            atualizarGraficos();
+        }
+
+        function atualizarEstatisticasTrafego(trafegoFiltrado) {
+            const totalVendas = vendas.reduce((acc, v) => acc + parseFloat(v.valor), 0);
+            const totalTrafegoVal = trafegoFiltrado.reduce((acc, t) => acc + parseFloat(t.valor), 0);
+            const roi = totalTrafegoVal > 0 ? ((totalVendas - totalTrafegoVal) / totalTrafegoVal * 100) : 0;
+
             document.getElementById('totalTrafego').textContent = formatarMoeda(totalTrafegoVal);
-            document.getElementById('qtdTrafego').textContent = trafego.length;
+            document.getElementById('qtdTrafego').textContent = trafegoFiltrado.length;
             document.getElementById('totalVendasTrafego').textContent = formatarMoeda(totalVendas);
             document.getElementById('roiTrafego').textContent = `${roi.toFixed(1)}%`;
-            document.getElementById('trafegoCount').textContent = `${trafego.length} registro${trafego.length !== 1 ? 's' : ''}`;
-
-            atualizarGraficos();
         }
 
         function atualizarGraficos() {
@@ -1796,11 +1861,38 @@
             atualizarProjecao();
         }
 
+        function getTrafegoFiltrado() {
+            const mesSelecionado = document.getElementById('filtroMesTrafego').value;
+            if (!mesSelecionado) return trafego;
+
+            return trafego.filter(item => {
+                const data = new Date(item.created_at);
+                // Obter data no formato dd/mm/yyyy no fuso de São Paulo
+                const dataLocal = data.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    timeZone: 'America/Sao_Paulo'
+                });
+                // dataLocal = "28/01/2026"
+                const [dia, mes, ano] = dataLocal.split('/');
+                const mesAnoItem = `${ano}-${mes}`; // "2026-01"
+                return mesAnoItem === mesSelecionado;
+            });
+        }
+
         function renderizarTrafego() {
+            const trafegoFiltrado = getTrafegoFiltrado();
+            const mesSelecionado = document.getElementById('filtroMesTrafego').value;
+
             if (trafego.length === 0) {
                 trafegoList.innerHTML = '<div class="empty-state"><div class="icon">📢</div><p>Nenhum gasto registrado ainda.</p></div>';
+            } else if (trafegoFiltrado.length === 0) {
+                const [ano, mes] = mesSelecionado.split('-');
+                const nomeMes = nomesMeses[mes];
+                trafegoList.innerHTML = `<div class="empty-state"><div class="icon">📅</div><p>Nenhum gasto em ${nomeMes} ${ano}.</p></div>`;
             } else {
-                trafegoList.innerHTML = trafego.map(item => `
+                trafegoList.innerHTML = trafegoFiltrado.map(item => `
                     <div class="sale-item trafego">
                         <div class="sale-info">
                             <div class="sale-name">📢 ${item.descricao}</div>
@@ -1811,7 +1903,15 @@
                     </div>
                 `).join('');
             }
-            atualizarEstatisticas();
+
+            // Atualizar contador
+            if (mesSelecionado && trafego.length > 0) {
+                document.getElementById('trafegoCount').textContent = `${trafegoFiltrado.length} de ${trafego.length} registro${trafego.length !== 1 ? 's' : ''}`;
+            } else {
+                document.getElementById('trafegoCount').textContent = `${trafego.length} registro${trafego.length !== 1 ? 's' : ''}`;
+            }
+
+            atualizarEstatisticasTrafego(trafegoFiltrado);
         }
 
         // ============================================
