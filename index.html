@@ -2254,20 +2254,12 @@
             const nomeMes = nomesMeses[mes];
             document.getElementById('projecaoMesNome').textContent = `${nomeMes} ${ano}`;
 
-            // Calcular valor das vendas recorrentes do mês selecionado (apenas a partir de hoje)
+            // Calcular valor das vendas recorrentes do mês selecionado (a partir de 28/01/2026)
             let valorRecorrentes = 0;
             let qtdRecorrentes = 0;
 
-            // Data de hoje no fuso de São Paulo (início do dia)
-            const hoje = new Date();
-            const hojeLocal = hoje.toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                timeZone: 'America/Sao_Paulo'
-            });
-            const [diaHoje, mesHoje, anoHoje] = hojeLocal.split('/');
-            const dataHojeNum = parseInt(anoHoje + mesHoje + diaHoje); // 20260128
+            // Data de corte fixa: 28/01/2026 (a partir desta data contam na projeção)
+            const dataCorteNum = 20260128; // 28 de janeiro de 2026
 
             vendas.forEach(venda => {
                 if (venda.tipo === 'Recorrente') {
@@ -2282,8 +2274,8 @@
                     const mesAnoVenda = `${anoVenda}-${mesVenda}`;
                     const dataVendaNum = parseInt(anoVenda + mesVenda + dia); // 20260128
 
-                    // Só conta se for do mês selecionado E a partir de hoje
-                    if (mesAnoVenda === mesAno && dataVendaNum >= dataHojeNum) {
+                    // Só conta se for do mês selecionado E a partir da data de corte (28/01/2026)
+                    if (mesAnoVenda === mesAno && dataVendaNum >= dataCorteNum) {
                         valorRecorrentes += venda.valor;
                         qtdRecorrentes++;
                     }
