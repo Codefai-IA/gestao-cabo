@@ -1780,6 +1780,21 @@
                         <button class="btn-filtro-data" data-filtro="ontem" onclick="filtrarPorData('ontem')">Ontem</button>
                         <button class="btn-filtro-data" data-filtro="7dias" onclick="filtrarPorData('7dias')">Últimos 7 dias</button>
                         <button class="btn-filtro-data" data-filtro="mes" onclick="filtrarPorData('mes')">Este mês</button>
+                        <select id="filtroMesVendas" onchange="filtrarPorMesEspecifico()" style="padding: 6px 12px; border: 2px solid #5c7a5c; border-radius: 8px; background: #1a2e1a; color: #e8e8e8; font-size: 0.8rem; cursor: pointer;">
+                            <option value="">Selecionar mês</option>
+                            <option value="2026-01">Janeiro 2026</option>
+                            <option value="2026-02">Fevereiro 2026</option>
+                            <option value="2026-03">Março 2026</option>
+                            <option value="2026-04">Abril 2026</option>
+                            <option value="2026-05">Maio 2026</option>
+                            <option value="2026-06">Junho 2026</option>
+                            <option value="2026-07">Julho 2026</option>
+                            <option value="2026-08">Agosto 2026</option>
+                            <option value="2026-09">Setembro 2026</option>
+                            <option value="2026-10">Outubro 2026</option>
+                            <option value="2026-11">Novembro 2026</option>
+                            <option value="2026-12">Dezembro 2026</option>
+                        </select>
                         <button class="btn-filtro-data" data-filtro="personalizado" onclick="toggleCalendario()">📅 Personalizado</button>
                     </div>
                     <div class="filtro-data-calendario" id="filtroCalendario" style="display: none;">
@@ -2857,20 +2872,39 @@
         // ATUALIZAR ESTATÍSTICAS E GRÁFICOS
         // ============================================
 
-        function atualizarEstatisticas() {
-            const totalVendas = vendas.reduce((acc, v) => acc + parseFloat(v.valor), 0);
-            const totalTrafegoVal = trafego.reduce((acc, t) => acc + parseFloat(t.valor), 0);
-            const qtdVendas = vendas.length;
-            const media = qtdVendas > 0 ? totalVendas / qtdVendas : 0;
-            const lucro = totalVendas - totalTrafegoVal;
+        function getTrafegoFiltradoPorData() {
+            if (!dataInicioFiltro && !dataFimFiltro) return trafego;
+            return trafego.filter(t => {
+                const dataTraf = new Date(t.created_at);
+                if (dataInicioFiltro && dataTraf < dataInicioFiltro) return false;
+                if (dataFimFiltro && dataTraf > dataFimFiltro) return false;
+                return true;
+            });
+        }
 
-            document.getElementById('totalVendas').textContent = formatarMoeda(totalVendas);
+        function atualizarEstatisticas() {
+            const vendasFiltradas = getVendasFiltradas();
+            const trafegoFiltrado = getTrafegoFiltradoPorData();
+            const totalVendasVal = vendasFiltradas.reduce((acc, v) => acc + parseFloat(v.valor), 0);
+            const totalTrafegoVal = trafegoFiltrado.reduce((acc, t) => acc + parseFloat(t.valor), 0);
+            const qtdVendas = vendasFiltradas.length;
+            const media = qtdVendas > 0 ? totalVendasVal / qtdVendas : 0;
+            const lucro = totalVendasVal - totalTrafegoVal;
+
+            document.getElementById('totalVendas').textContent = formatarMoeda(totalVendasVal);
             document.getElementById('qtdVendas').textContent = qtdVendas;
             document.getElementById('mediaVendas').textContent = formatarMoeda(media);
             document.getElementById('lucroLiquido').textContent = formatarMoeda(lucro);
-            document.getElementById('salesCount').textContent = `${qtdVendas} registro${qtdVendas !== 1 ? 's' : ''}`;
 
-            atualizarGraficos();
+            const totalGeral = vendas.length;
+            const temFiltro = filtroDataAtivo !== 'todos' || document.getElementById('buscaNome').value.trim();
+            if (temFiltro && totalGeral > 0) {
+                document.getElementById('salesCount').textContent = `${qtdVendas} de ${totalGeral} registro${totalGeral !== 1 ? 's' : ''}`;
+            } else {
+                document.getElementById('salesCount').textContent = `${qtdVendas} registro${qtdVendas !== 1 ? 's' : ''}`;
+            }
+
+            atualizarGraficos(vendasFiltradas);
         }
 
         function atualizarEstatisticasTrafego(trafegoFiltrado) {
@@ -2884,14 +2918,15 @@
             document.getElementById('roiTrafego').textContent = `${roi.toFixed(1)}%`;
         }
 
-        function atualizarGraficos() {
+        function atualizarGraficos(vendasParaGrafico) {
+            const dadosVendas = vendasParaGrafico || vendas;
             const planos = ['Mensal', 'Bimestral', 'Trimestral', 'Quadrimestral', 'Semestral', 'Anual'];
             const contagem = {};
             const faturamento = {};
 
             planos.forEach(p => { contagem[p] = 0; faturamento[p] = 0; });
 
-            vendas.forEach(v => {
+            dadosVendas.forEach(v => {
                 if (v.plano && planos.includes(v.plano)) {
                     contagem[v.plano]++;
                     faturamento[v.plano] += parseFloat(v.valor);
@@ -2902,8 +2937,8 @@
             const maxFaturamento = Math.max(...Object.values(faturamento), 1);
 
             const chartPlanos = document.getElementById('chartPlanos');
-            if (vendas.length === 0) {
-                chartPlanos.innerHTML = '<div class="empty-state"><p>Sem dados ainda</p></div>';
+            if (dadosVendas.length === 0) {
+                chartPlanos.innerHTML = '<div class="empty-state"><p>Sem dados neste período</p></div>';
             } else {
                 chartPlanos.innerHTML = planos.map(plano => `
                     <div class="chart-bar-item">
@@ -2919,8 +2954,8 @@
             }
 
             const chartFaturamento = document.getElementById('chartFaturamento');
-            if (vendas.length === 0) {
-                chartFaturamento.innerHTML = '<div class="empty-state"><p>Sem dados ainda</p></div>';
+            if (dadosVendas.length === 0) {
+                chartFaturamento.innerHTML = '<div class="empty-state"><p>Sem dados neste período</p></div>';
             } else {
                 chartFaturamento.innerHTML = planos.map(plano => `
                     <div class="chart-bar-item">
@@ -2978,6 +3013,9 @@
 
         function filtrarPorData(tipo) {
             filtroDataAtivo = tipo;
+
+            // Resetar dropdown de mês quando outro filtro é usado
+            document.getElementById('filtroMesVendas').value = '';
 
             // Atualizar botões ativos
             document.querySelectorAll('.btn-filtro-data').forEach(btn => {
@@ -3078,7 +3116,37 @@
             dataInicioFiltro = null;
             dataFimFiltro = null;
             document.getElementById('filtroCalendario').style.display = 'none';
+            document.getElementById('filtroMesVendas').value = '';
             filtrarPorData('todos');
+        }
+
+        function filtrarPorMesEspecifico() {
+            const mesAno = document.getElementById('filtroMesVendas').value;
+            if (!mesAno) {
+                filtrarPorData('todos');
+                return;
+            }
+
+            const [ano, mes] = mesAno.split('-');
+            const anoNum = parseInt(ano);
+            const mesNum = parseInt(mes) - 1; // JS months are 0-indexed
+
+            filtroDataAtivo = 'mesEspecifico';
+
+            // Desmarcar botões de filtro rápido
+            document.querySelectorAll('.btn-filtro-data').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Esconder calendário personalizado
+            document.getElementById('filtroCalendario').style.display = 'none';
+
+            // Definir intervalo do mês selecionado
+            dataInicioFiltro = new Date(anoNum, mesNum, 1);
+            dataFimFiltro = new Date(anoNum, mesNum + 1, 0);
+            dataFimFiltro.setHours(23, 59, 59, 999);
+
+            renderizarVendas();
         }
 
         // ============================================
@@ -3493,14 +3561,6 @@
                         </div>
                     </div>
                 `).join('');
-            }
-
-            // Atualizar contador com info de filtro
-            const temFiltroAtivo = buscaAtiva || filtroDataAtual;
-            if (temFiltroAtivo && totalVendas > 0) {
-                document.getElementById('salesCount').textContent = `${totalFiltradas} de ${totalVendas} registro${totalVendas !== 1 ? 's' : ''}`;
-            } else {
-                document.getElementById('salesCount').textContent = `${totalVendas} registro${totalVendas !== 1 ? 's' : ''}`;
             }
 
             atualizarEstatisticas();
