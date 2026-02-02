@@ -2246,6 +2246,77 @@
             '09': 'Setembro', '10': 'Outubro', '11': 'Novembro', '12': 'Dezembro'
         };
 
+        // Função auxiliar para obter vendas mensais ativas por cliente
+        function getVendasMensaisAtivasPorCliente(mesAno) {
+            const dataCorteNum = 20260128; // 28 de janeiro de 2026
+            const vendasMensais = {};
+
+            // DEBUG: Contar vendas mensais totais
+            let totalMensais = 0;
+            let totalRecorrentes = 0;
+            let totalAvulsa = 0;
+
+            vendas.forEach(venda => {
+                // Contar vendas mensais
+                if (venda.plano === 'Mensal') {
+                    totalMensais++;
+                    if (venda.tipo === 'Recorrente') totalRecorrentes++;
+                    if (venda.tipo === 'Avulsa') totalAvulsa++;
+                }
+
+                // Filtrar apenas vendas mensais recorrentes
+                if (venda.tipo !== 'Recorrente' || venda.plano !== 'Mensal') return;
+
+                // Processar data da venda
+                const dataVenda = new Date(venda.created_at);
+                const dataLocal = dataVenda.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    timeZone: 'America/Sao_Paulo'
+                });
+                const [dia, mesVenda, anoVenda] = dataLocal.split('/');
+                const mesAnoVenda = `${anoVenda}-${mesVenda}`;
+                const dataVendaNum = parseInt(anoVenda + mesVenda + dia);
+
+                // Filtros:
+                // 1. Não incluir vendas futuras
+                if (mesAnoVenda > mesAno) return;
+
+                let incluirVenda = false;
+
+                // Para projeção de Janeiro: apenas vendas >= 28/01/2026
+                if (mesAno === '2026-01') {
+                    incluirVenda = dataVendaNum >= dataCorteNum;
+                }
+                // Para projeção de Fevereiro em diante: todas as vendas de Janeiro em diante (mês inteiro)
+                else if (mesAno >= '2026-02') {
+                    incluirVenda = mesAnoVenda >= '2026-01';
+                }
+
+                if (incluirVenda) {
+                    const nomeNormalizado = venda.nome.toLowerCase().trim();
+
+                    // Guardar apenas a venda mais recente de cada cliente
+                    if (!vendasMensais[nomeNormalizado] ||
+                        new Date(venda.created_at) > new Date(vendasMensais[nomeNormalizado].created_at)) {
+                        vendasMensais[nomeNormalizado] = venda;
+                    }
+                }
+            });
+
+            // DEBUG: Mostrar estatísticas no console
+            console.log('=== DEBUG PROJEÇÃO ===');
+            console.log('Mês selecionado:', mesAno);
+            console.log('Total vendas mensais:', totalMensais);
+            console.log('- Recorrentes:', totalRecorrentes);
+            console.log('- Avulsa:', totalAvulsa);
+            console.log('Clientes únicos após agrupamento:', Object.keys(vendasMensais).length);
+            console.log('======================');
+
+            return Object.values(vendasMensais);
+        }
+
         function atualizarProjecao() {
             const select = document.getElementById('filtroMesProjecao');
             const mesAno = select.value; // formato: 'YYYY-MM'
@@ -2254,15 +2325,19 @@
             const nomeMes = nomesMeses[mes];
             document.getElementById('projecaoMesNome').textContent = `${nomeMes} ${ano}`;
 
-            // Calcular valor das vendas recorrentes do mês selecionado (a partir de 28/01/2026)
-            let valorRecorrentes = 0;
-            let qtdRecorrentes = 0;
-
-            // Data de corte fixa: 28/01/2026 (a partir desta data contam na projeção)
             const dataCorteNum = 20260128; // 28 de janeiro de 2026
 
+            // === VENDAS MENSAIS RECORRENTES (MRR) ===
+            const vendasMensaisAtivas = getVendasMensaisAtivasPorCliente(mesAno);
+            const valorMensal = vendasMensaisAtivas.reduce((sum, v) => sum + v.valor, 0);
+            const qtdMensal = vendasMensaisAtivas.length;
+
+            // === VENDAS RECORRENTES NÃO-MENSAIS (só do mês selecionado) ===
+            let valorOutrasRecorrentes = 0;
+            let qtdOutrasRecorrentes = 0;
+
             vendas.forEach(venda => {
-                if (venda.tipo === 'Recorrente') {
+                if (venda.tipo === 'Recorrente' && venda.plano !== 'Mensal') {
                     const dataVenda = new Date(venda.created_at);
                     const dataLocal = dataVenda.toLocaleDateString('pt-BR', {
                         day: '2-digit',
@@ -2272,33 +2347,37 @@
                     });
                     const [dia, mesVenda, anoVenda] = dataLocal.split('/');
                     const mesAnoVenda = `${anoVenda}-${mesVenda}`;
-                    const dataVendaNum = parseInt(anoVenda + mesVenda + dia); // 20260128
+                    const dataVendaNum = parseInt(anoVenda + mesVenda + dia);
 
-                    // Só conta se for do mês selecionado E a partir da data de corte (28/01/2026)
+                    // Só conta se for do mês selecionado E a partir da data de corte
                     if (mesAnoVenda === mesAno && dataVendaNum >= dataCorteNum) {
-                        valorRecorrentes += venda.valor;
-                        qtdRecorrentes++;
+                        valorOutrasRecorrentes += venda.valor;
+                        qtdOutrasRecorrentes++;
                     }
                 }
             });
 
-            // Somar com projeções fixas se existirem
+            // === PROJEÇÕES FIXAS ===
             const projecaoFixa = projecoesFixas[mesAno];
             const valorFixo = projecaoFixa ? projecaoFixa.valorFixo : 0;
-            const valorTotal = valorRecorrentes + valorFixo;
 
+            // === TOTAL ===
+            const valorTotal = valorMensal + valorOutrasRecorrentes + valorFixo;
             document.getElementById('projecaoValor').textContent = formatarMoeda(valorTotal);
 
-            // Montar detalhe
+            // === DETALHES ===
             let detalhes = [];
-            if (qtdRecorrentes > 0) {
-                detalhes.push(`${qtdRecorrentes} venda${qtdRecorrentes > 1 ? 's' : ''} recorrente${qtdRecorrentes > 1 ? 's' : ''}: ${formatarMoeda(valorRecorrentes)}`);
+            if (qtdMensal > 0) {
+                detalhes.push(`${qtdMensal} mensal${qtdMensal > 1 ? 'is' : ''} ativa${qtdMensal > 1 ? 's' : ''}: ${formatarMoeda(valorMensal)}`);
+            }
+            if (qtdOutrasRecorrentes > 0) {
+                detalhes.push(`${qtdOutrasRecorrentes} recorrente${qtdOutrasRecorrentes > 1 ? 's' : ''} do mês: ${formatarMoeda(valorOutrasRecorrentes)}`);
             }
             if (projecaoFixa && projecaoFixa.detalhe) {
                 detalhes.push(projecaoFixa.detalhe);
             }
 
-            document.getElementById('projecaoDetalhe').textContent = detalhes.length > 0 ? detalhes.join(' | ') : 'Nenhuma projeção para este mês';
+            document.getElementById('projecaoDetalhe').textContent = detalhes.length > 0 ? detalhes.join(' + ') : 'Nenhuma projeção para este mês';
         }
 
         // ============================================
@@ -2476,6 +2555,7 @@
 
                 vendas.unshift(data[0]);
                 renderizarVendas();
+                atualizarProjecao();
                 showToast('Venda registrada com sucesso!');
                 return true;
             } catch (error) {
@@ -2501,6 +2581,7 @@
 
                 vendas = vendas.filter(v => v.id !== id);
                 renderizarVendas();
+                atualizarProjecao();
                 showToast('Venda removida!');
             } catch (error) {
                 console.error('Erro ao remover venda:', error);
@@ -2614,6 +2695,7 @@
                 vendas.unshift(data[0]);
                 renderizarVendas();
                 renderizarLembretes();
+                atualizarProjecao();
                 showToast(`Venda renovada para ${vendaOriginal.nome}!`);
             } catch (error) {
                 console.error('Erro ao renovar venda:', error);
@@ -2640,6 +2722,7 @@
                 venda.tipo = 'Avulsa';
                 renderizarVendas();
                 renderizarLembretes();
+                atualizarProjecao();
                 showToast(`Recorrência cancelada para ${venda.nome}`);
             } catch (error) {
                 console.error('Erro ao cancelar recorrência:', error);
@@ -2693,6 +2776,7 @@
                 }
 
                 renderizarVendas();
+                atualizarProjecao();
                 fecharModal();
                 showToast('Venda atualizada!');
             } catch (error) {
