@@ -2404,7 +2404,8 @@
                 const { data, error } = await supabaseClient
                     .from('vendas')
                     .select('*')
-                    .order('created_at', { ascending: false });
+                    .order('created_at', { ascending: false })
+                    .limit(10000);
 
                 if (error) throw error;
 
@@ -2424,7 +2425,8 @@
                 const { data, error } = await supabaseClient
                     .from('leads')
                     .select('*')
-                    .order('data', { ascending: false });
+                    .order('data', { ascending: false })
+                    .limit(10000);
 
                 if (error) throw error;
 
@@ -2809,7 +2811,8 @@
                 const { data, error } = await supabaseClient
                     .from('trafego')
                     .select('*')
-                    .order('created_at', { ascending: false });
+                    .order('created_at', { ascending: false })
+                    .limit(10000);
 
                 if (error) throw error;
 
