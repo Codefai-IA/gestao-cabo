@@ -2349,13 +2349,19 @@
             return Object.values(vendasMensais);
         }
 
-        function atualizarProjecao() {
+        function atualizarProjecao(sincronizarFiltro) {
             const select = document.getElementById('filtroMesProjecao');
             const mesAno = select.value; // formato: 'YYYY-MM'
             const [ano, mes] = mesAno.split('-');
 
             const nomeMes = nomesMeses[mes];
             document.getElementById('projecaoMesNome').textContent = `${nomeMes} ${ano}`;
+
+            // Sincronizar filtro de período do topo quando o usuário troca o mês
+            if (sincronizarFiltro !== false) {
+                document.getElementById('filtroMesVendas').value = mesAno;
+                filtrarPorMesEspecifico();
+            }
 
             const dataCorteNum = 20260128; // 28 de janeiro de 2026
 
@@ -2606,7 +2612,7 @@
 
                 vendas.unshift(data[0]);
                 renderizarVendas();
-                atualizarProjecao();
+                atualizarProjecao(false);
                 showToast('Venda registrada com sucesso!');
                 return true;
             } catch (error) {
@@ -2632,7 +2638,7 @@
 
                 vendas = vendas.filter(v => v.id !== id);
                 renderizarVendas();
-                atualizarProjecao();
+                atualizarProjecao(false);
                 showToast('Venda removida!');
             } catch (error) {
                 console.error('Erro ao remover venda:', error);
@@ -2746,7 +2752,7 @@
                 vendas.unshift(data[0]);
                 renderizarVendas();
                 renderizarLembretes();
-                atualizarProjecao();
+                atualizarProjecao(false);
                 showToast(`Venda renovada para ${vendaOriginal.nome}!`);
             } catch (error) {
                 console.error('Erro ao renovar venda:', error);
@@ -2773,7 +2779,7 @@
                 venda.tipo = 'Avulsa';
                 renderizarVendas();
                 renderizarLembretes();
-                atualizarProjecao();
+                atualizarProjecao(false);
                 showToast(`Recorrência cancelada para ${venda.nome}`);
             } catch (error) {
                 console.error('Erro ao cancelar recorrência:', error);
@@ -2827,7 +2833,7 @@
                 }
 
                 renderizarVendas();
-                atualizarProjecao();
+                atualizarProjecao(false);
                 fecharModal();
                 showToast('Venda atualizada!');
             } catch (error) {
@@ -3610,7 +3616,7 @@
 
             atualizarEstatisticas();
             renderizarLembretes();
-            atualizarProjecao();
+            atualizarProjecao(false);
         }
 
         function getTrafegoFiltrado() {
@@ -3759,7 +3765,7 @@
                 renderizarVendas();
                 renderizarTrafego();
                 setupRealtimeSubscriptions();
-                atualizarProjecao(); // Inicializar projeção mensal
+                atualizarProjecao(false); // Inicializar projeção mensal
 
                 // Definir data padrão do input de leads como hoje
                 const hoje = new Date().toISOString().split('T')[0];
