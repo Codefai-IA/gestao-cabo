@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Vendas - Cabo Pereira</title>
+    <title>Cabo Pereira - Controle de Vendas</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -14,83 +14,63 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a2e1a 0%, #2d4a2d 50%, #1a2e1a 100%);
+            background: #0f1923;
             min-height: 100vh;
-            color: #e8e8e8;
+            color: #f1f5f9;
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px;
         }
 
         /* Header */
         .header {
             text-align: center;
-            padding: 30px 20px;
-            background: linear-gradient(180deg, #2d4a2d 0%, #1f3520 100%);
-            border-bottom: 4px solid #8b7355;
-            margin-bottom: 30px;
-            position: relative;
+            padding: 28px 24px;
+            background: linear-gradient(180deg, #1a2332 0%, #0f1923 100%);
+            border-bottom: 1px solid #334155;
+            margin-bottom: 0;
         }
-
-        .header::before,
-        .header::after {
-            content: "★";
-            font-size: 2rem;
-            color: #c4a64a;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .header::before { left: 20px; }
-        .header::after { right: 20px; }
 
         .header h1 {
-            font-size: 2.2rem;
-            color: #c4a64a;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 5px;
+            font-size: 1.8rem;
+            color: #f1f5f9;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
         }
 
         .header .subtitle {
-            color: #9cb89c;
-            font-size: 1rem;
-            letter-spacing: 2px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            font-weight: 400;
         }
 
-        .rank-badge {
-            display: inline-block;
-            background: linear-gradient(180deg, #5c7a5c 0%, #3d5a3d 100%);
-            padding: 8px 25px;
-            border-radius: 5px;
-            margin-top: 15px;
-            border: 2px solid #8b7355;
-            font-weight: bold;
-            color: #f0e6d3;
-        }
+        .rank-badge { display: none; }
 
         .status-badge {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
             margin-left: 10px;
-            font-weight: normal;
+            font-weight: 600;
+            vertical-align: middle;
         }
 
         .status-online {
-            background: #27ae60;
-            color: white;
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .status-offline {
-            background: #e74c3c;
-            color: white;
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         /* Loading */
@@ -100,7 +80,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(26, 46, 26, 0.9);
+            background: rgba(15, 25, 35, 0.95);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -114,12 +94,12 @@
         }
 
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #5c7a5c;
-            border-top-color: #c4a64a;
+            width: 44px;
+            height: 44px;
+            border: 3px solid #1e2d3d;
+            border-top-color: #3b82f6;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
@@ -127,44 +107,46 @@
         }
 
         .loading-text {
-            color: #c4a64a;
-            font-size: 1.1rem;
+            color: #94a3b8;
+            font-size: 0.95rem;
         }
 
         /* Tabs */
         .tabs-container {
             display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
+            gap: 6px;
+            margin-bottom: 24px;
+            background: #1a2332;
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid #263848;
         }
 
         .tab-btn {
             flex: 1;
-            padding: 15px 25px;
-            background: linear-gradient(180deg, #2d4a2d 0%, #1f3520 100%);
-            border: 2px solid #5c7a5c;
-            border-radius: 10px;
-            color: #9cb89c;
-            font-size: 1rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .tab-btn:hover {
-            background: linear-gradient(180deg, #3d5a3d 0%, #2d4a2d 100%);
+            background: rgba(59, 130, 246, 0.08);
+            color: #cbd5e1;
         }
 
         .tab-btn.active {
-            background: linear-gradient(180deg, #8b7355 0%, #6b5a45 100%);
-            color: #f0e6d3;
-            border-color: #c4a64a;
+            background: #3b82f6;
+            color: #ffffff;
         }
 
         .tab-content {
@@ -178,20 +160,24 @@
         /* Stats Cards */
         .stats-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
         .stat-card {
-            background: linear-gradient(145deg, #3d5a3d 0%, #2d4a2d 100%);
-            padding: 20px;
-            border-radius: 10px;
+            background: #1e2d3d;
+            padding: 24px;
+            border-radius: 12px;
             text-align: center;
-            border: 2px solid #5c7a5c;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid #263848;
             position: relative;
             overflow: hidden;
+            transition: border-color 0.2s ease;
+        }
+
+        .stat-card:hover {
+            border-color: #334155;
         }
 
         .stat-card::before {
@@ -200,47 +186,140 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #8b7355, #c4a64a, #8b7355);
+            height: 3px;
+            background: #3b82f6;
         }
 
-        .stat-card .icon { font-size: 1.8rem; margin-bottom: 8px; }
-        .stat-card .value { font-size: 1.5rem; font-weight: bold; color: #c4a64a; margin-bottom: 5px; }
-        .stat-card .label { color: #9cb89c; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card .icon { font-size: 1.5rem; margin-bottom: 10px; opacity: 0.8; }
+        .stat-card .value { font-size: 2rem; font-weight: 700; color: #f59e0b; margin-bottom: 6px; }
+        .stat-card .label { color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; }
 
-        .stat-card.negative .value { color: #e74c3c; }
-        .stat-card.positive .value { color: #27ae60; }
+        .stat-card.negative .value { color: #ef4444; }
+        .stat-card.negative::before { background: #ef4444; }
+        .stat-card.positive .value { color: #10b981; }
+        .stat-card.positive::before { background: #10b981; }
+
+        /* Card Lucro + Projeção */
+        .stat-card.lucro-card {
+            grid-column: span 2;
+            padding: 20px 24px;
+        }
+
+        .stat-card.lucro-card::before {
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+        }
+
+        .lucro-resumo {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .lucro-linha {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lucro-label {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .lucro-valor {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .lucro-valor.vendas {
+            color: #10b981;
+        }
+
+        .lucro-valor.projecao {
+            color: #3b82f6;
+        }
+
+        .lucro-divider {
+            height: 1px;
+            background: #334155;
+            margin: 4px 0;
+        }
+
+        .lucro-linha.total .lucro-label {
+            color: #f1f5f9;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .lucro-valor.total-val {
+            color: #f59e0b;
+            font-size: 1.4rem;
+        }
+
+        .projecao-select-inline {
+            margin-bottom: 10px;
+        }
+
+        .projecao-select-inline select {
+            padding: 4px 10px;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            background: #0f1923;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            padding-right: 24px;
+        }
+
+        .projecao-select-inline select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .projecao-detalhe-inline {
+            color: #64748b;
+            font-size: 0.7rem;
+            margin-top: 4px;
+            line-height: 1.3;
+            max-width: 220px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
         /* Charts Section */
         .charts-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
         .chart-card {
-            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
-            padding: 25px;
-            border-radius: 10px;
-            border: 2px solid #5c7a5c;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            background: #1e2d3d;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #263848;
         }
 
         .chart-title {
-            color: #c4a64a;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: #f1f5f9;
+            font-size: 0.95rem;
+            font-weight: 600;
             margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #5c7a5c;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #263848;
         }
 
         .chart-bars {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .chart-bar-item {
@@ -252,22 +331,23 @@
         .chart-bar-label {
             width: 100px;
             font-size: 0.85rem;
-            color: #9cb89c;
+            color: #94a3b8;
+            font-weight: 500;
         }
 
         .chart-bar-track {
             flex: 1;
-            height: 25px;
-            background: #1a2e1a;
-            border-radius: 5px;
+            height: 28px;
+            background: #0f1923;
+            border-radius: 6px;
             overflow: hidden;
             position: relative;
         }
 
         .chart-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, #8b7355, #c4a64a);
-            border-radius: 5px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            border-radius: 6px;
             transition: width 0.5s ease;
             display: flex;
             align-items: center;
@@ -278,26 +358,26 @@
 
         .chart-bar-value {
             font-size: 0.75rem;
-            font-weight: bold;
-            color: #1a2e1a;
+            font-weight: 700;
+            color: #ffffff;
             white-space: nowrap;
         }
 
         .chart-bar-count {
             width: 50px;
             text-align: right;
-            font-weight: bold;
-            color: #c4a64a;
+            font-weight: 700;
+            color: #f59e0b;
+            font-size: 0.9rem;
         }
 
         /* Form Section */
         .form-section {
-            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            border: 2px solid #5c7a5c;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            background: #1e2d3d;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            border: 1px solid #263848;
         }
 
         .form-title {
@@ -306,21 +386,20 @@
             gap: 10px;
             margin-bottom: 20px;
             padding-bottom: 12px;
-            border-bottom: 2px solid #5c7a5c;
+            border-bottom: 1px solid #263848;
         }
 
         .form-title h2 {
-            color: #c4a64a;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            color: #f1f5f9;
+            font-size: 1rem;
+            font-weight: 600;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 16px;
+            margin-bottom: 16px;
         }
 
         .form-group {
@@ -329,259 +408,261 @@
         }
 
         .form-group label {
-            color: #9cb89c;
+            color: #94a3b8;
             margin-bottom: 6px;
-            font-weight: 600;
-            text-transform: uppercase;
+            font-weight: 500;
             font-size: 0.8rem;
-            letter-spacing: 1px;
+            letter-spacing: 0.3px;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
-            padding: 12px;
-            border: 2px solid #5c7a5c;
+            padding: 10px 14px;
+            border: 1px solid #334155;
             border-radius: 8px;
-            background: #1a2e1a;
-            color: #e8e8e8;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            background: #0f1923;
+            color: #f1f5f9;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
         }
 
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #c4a64a;
-            box-shadow: 0 0 10px rgba(196, 166, 74, 0.3);
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
         }
 
         .form-group input::placeholder,
         .form-group textarea::placeholder {
-            color: #6b8b6b;
+            color: #475569;
         }
 
         .form-group select {
             cursor: pointer;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239cb89c' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 12px center;
             padding-right: 35px;
         }
 
         .form-group select option {
-            background: #1a2e1a;
-            color: #e8e8e8;
+            background: #0f1923;
+            color: #f1f5f9;
         }
 
         .btn-add {
             width: 100%;
-            padding: 12px 25px;
-            background: linear-gradient(180deg, #8b7355 0%, #6b5a45 100%);
-            color: #f0e6d3;
+            padding: 12px 24px;
+            background: #3b82f6;
+            color: #ffffff;
             border: none;
             border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            font-size: 0.95rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .btn-add:hover {
-            background: linear-gradient(180deg, #9b8365 0%, #7b6a55 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(139, 115, 85, 0.4);
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .btn-add:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none;
         }
 
         /* Sales List */
         .sales-section {
-            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
-            padding: 25px;
-            border-radius: 10px;
-            border: 2px solid #5c7a5c;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            background: #1e2d3d;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #263848;
         }
 
         .sales-title {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
             padding-bottom: 12px;
-            border-bottom: 2px solid #5c7a5c;
+            border-bottom: 1px solid #263848;
         }
 
         .sales-title h2 {
-            color: #c4a64a;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            color: #f1f5f9;
+            font-size: 1rem;
+            font-weight: 600;
         }
 
         .sales-count {
-            background: #1a2e1a;
-            padding: 5px 12px;
+            background: #0f1923;
+            padding: 4px 12px;
             border-radius: 20px;
-            color: #9cb89c;
-            font-size: 0.85rem;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
         .sales-list {
-            max-height: 350px;
+            max-height: 400px;
             overflow-y: auto;
         }
 
-        .sales-list::-webkit-scrollbar { width: 8px; }
-        .sales-list::-webkit-scrollbar-track { background: #1a2e1a; border-radius: 4px; }
-        .sales-list::-webkit-scrollbar-thumb { background: #5c7a5c; border-radius: 4px; }
+        .sales-list::-webkit-scrollbar { width: 6px; }
+        .sales-list::-webkit-scrollbar-track { background: #0f1923; border-radius: 3px; }
+        .sales-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
 
         .sale-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 15px;
-            background: linear-gradient(90deg, #2d4a2d 0%, #1f3520 100%);
+            padding: 14px 16px;
+            background: #162233;
             border-radius: 8px;
-            margin-bottom: 8px;
-            border-left: 4px solid #8b7355;
-            transition: all 0.3s ease;
+            margin-bottom: 6px;
+            border-left: 3px solid #3b82f6;
+            transition: all 0.2s ease;
             animation: fadeIn 0.3s ease;
         }
 
         .sale-item:hover {
-            transform: translateX(5px);
-            background: linear-gradient(90deg, #3d5a3d 0%, #2d4a2d 100%);
+            background: #1a2840;
         }
 
         .sale-item.trafego {
-            border-left-color: #e74c3c;
+            border-left-color: #f97316;
         }
 
         .sale-item.recorrente {
-            border-left-color: #3498db;
+            border-left-color: #3b82f6;
         }
 
         .tipo-badge {
             display: inline-block;
             padding: 2px 8px;
-            border-radius: 10px;
+            border-radius: 6px;
             font-size: 0.7rem;
             margin-left: 8px;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .tipo-badge.recorrente {
-            background: #3498db;
-            color: white;
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
         }
 
         .tipo-badge.avulsa {
-            background: #9b59b6;
-            color: white;
+            background: rgba(168, 85, 247, 0.15);
+            color: #a78bfa;
         }
 
         /* Search Box */
         .search-box {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 8px;
+            margin-bottom: 16px;
         }
 
         .search-box input {
             flex: 1;
-            padding: 12px 15px;
-            border: 2px solid #5c7a5c;
+            padding: 10px 14px;
+            border: 1px solid #334155;
             border-radius: 8px;
-            background: #1a2e1a;
-            color: #e8e8e8;
-            font-size: 1rem;
+            background: #0f1923;
+            color: #f1f5f9;
+            font-size: 0.95rem;
         }
 
         .search-box input:focus {
             outline: none;
-            border-color: #c4a64a;
+            border-color: #3b82f6;
         }
 
         .search-box input::placeholder {
-            color: #6b8b6b;
+            color: #475569;
         }
 
         .btn-clear-search {
-            padding: 12px 20px;
-            background: linear-gradient(180deg, #5c7a5c 0%, #3d5a3d 100%);
-            color: #f0e6d3;
-            border: none;
+            padding: 10px 16px;
+            background: #263848;
+            color: #94a3b8;
+            border: 1px solid #334155;
             border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
         }
 
         .btn-clear-search:hover {
-            background: linear-gradient(180deg, #6c8a6c 0%, #4d6a4d 100%);
+            background: #334155;
+            color: #f1f5f9;
         }
 
-        /* Filtro de Data para Vendas */
+        /* Filtro de Data Global (topo) */
         .filtro-data-vendas {
-            margin-bottom: 15px;
+            background: #1a2332;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid #263848;
+            margin-bottom: 20px;
         }
 
         .filtro-data-rapidos {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 10px;
+            gap: 6px;
+            align-items: center;
         }
 
         .btn-filtro-data {
-            padding: 8px 14px;
-            background: linear-gradient(180deg, #3d5a3d 0%, #2a4a2a 100%);
-            color: #b8b8b8;
-            border: 2px solid #5c7a5c;
-            border-radius: 8px;
+            padding: 7px 14px;
+            background: #1a2332;
+            color: #94a3b8;
+            border: 1px solid #263848;
+            border-radius: 20px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 500;
             transition: all 0.2s ease;
         }
 
         .btn-filtro-data:hover {
-            background: linear-gradient(180deg, #4d6a4d 0%, #3a5a3a 100%);
-            color: #e8e8e8;
+            background: #263848;
+            color: #f1f5f9;
         }
 
         .btn-filtro-data.active {
-            background: linear-gradient(180deg, #c4a64a 0%, #a08030 100%);
-            color: #1a2e1a;
-            border-color: #d4b65a;
-            font-weight: bold;
+            background: #3b82f6;
+            color: #ffffff;
+            border-color: #3b82f6;
+            font-weight: 600;
         }
 
         .filtro-data-calendario {
-            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
-            padding: 15px;
+            background: #162233;
+            padding: 16px;
             border-radius: 10px;
-            border: 2px solid #5c7a5c;
+            border: 1px solid #263848;
             margin-top: 10px;
         }
 
         .calendario-inputs {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
             align-items: flex-end;
         }
 
@@ -592,54 +673,53 @@
         }
 
         .calendario-campo label {
-            color: #c4a64a;
-            font-weight: bold;
+            color: #94a3b8;
+            font-weight: 500;
             font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .calendario-campo input[type="date"] {
-            padding: 10px 12px;
-            border: 2px solid #5c7a5c;
+            padding: 8px 12px;
+            border: 1px solid #334155;
             border-radius: 8px;
-            background: #1a2e1a;
-            color: #e8e8e8;
-            font-size: 0.95rem;
+            background: #0f1923;
+            color: #f1f5f9;
+            font-size: 0.9rem;
             cursor: pointer;
         }
 
         .calendario-campo input[type="date"]:focus {
             outline: none;
-            border-color: #c4a64a;
+            border-color: #3b82f6;
         }
 
         .calendario-campo input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(0.8);
+            filter: invert(0.7);
             cursor: pointer;
         }
 
         .btn-limpar-data {
-            padding: 10px 16px;
-            background: linear-gradient(180deg, #8b5a5a 0%, #6b3a3a 100%);
-            color: #f0e6d3;
-            border: none;
+            padding: 8px 16px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
             border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 500;
             font-size: 0.85rem;
+            transition: all 0.2s ease;
         }
 
         .btn-limpar-data:hover {
-            background: linear-gradient(180deg, #9b6a6a 0%, #7b4a4a 100%);
+            background: rgba(239, 68, 68, 0.2);
         }
 
         /* Métricas Tab Styles */
         .metricas-filtros {
-            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
+            background: #1e2d3d;
             padding: 20px;
             border-radius: 12px;
-            border: 2px solid #5c7a5c;
+            border: 1px solid #263848;
             margin-bottom: 20px;
             display: flex;
             flex-wrap: wrap;
@@ -653,41 +733,40 @@
         }
 
         .filtro-grupo label {
-            color: #c4a64a;
-            font-weight: bold;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: #94a3b8;
+            font-weight: 500;
+            font-size: 0.8rem;
+            letter-spacing: 0.3px;
         }
 
         .filtro-periodo-btns {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
         }
 
         .btn-filtro-metrica {
-            padding: 8px 14px;
-            background: linear-gradient(180deg, #3d5a3d 0%, #2a4a2a 100%);
-            color: #b8b8b8;
-            border: 2px solid #5c7a5c;
-            border-radius: 8px;
+            padding: 7px 14px;
+            background: #1a2332;
+            color: #94a3b8;
+            border: 1px solid #263848;
+            border-radius: 20px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 500;
             transition: all 0.2s ease;
         }
 
         .btn-filtro-metrica:hover {
-            background: linear-gradient(180deg, #4d6a4d 0%, #3a5a3a 100%);
-            color: #e8e8e8;
+            background: #263848;
+            color: #f1f5f9;
         }
 
         .btn-filtro-metrica.active {
-            background: linear-gradient(180deg, #c4a64a 0%, #a08030 100%);
-            color: #1a2e1a;
-            border-color: #d4b65a;
-            font-weight: bold;
+            background: #3b82f6;
+            color: #ffffff;
+            border-color: #3b82f6;
+            font-weight: 600;
         }
 
         .filtro-datas {
@@ -698,44 +777,47 @@
 
         .filtro-datas input[type="date"] {
             padding: 8px 12px;
-            border: 2px solid #5c7a5c;
+            border: 1px solid #334155;
             border-radius: 8px;
-            background: #1a2e1a;
-            color: #e8e8e8;
+            background: #0f1923;
+            color: #f1f5f9;
             font-size: 0.9rem;
         }
 
         .filtro-datas input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(0.8);
+            filter: invert(0.7);
             cursor: pointer;
         }
 
         .filtro-datas span {
-            color: #8b8b8b;
+            color: #64748b;
         }
 
         .metricas-stats .stat-card.organico {
-            border-left: 4px solid #4caf50;
+            border-left: 3px solid #10b981;
         }
+        .metricas-stats .stat-card.organico::before { background: #10b981; }
 
         .metricas-stats .stat-card.trafego-pago {
-            border-left: 4px solid #ff9800;
+            border-left: 3px solid #f97316;
         }
+        .metricas-stats .stat-card.trafego-pago::before { background: #f97316; }
 
         .metricas-section {
-            background: linear-gradient(145deg, #2d4a2d 0%, #1a3a1a 100%);
+            background: #1e2d3d;
             border-radius: 12px;
-            border: 2px solid #5c7a5c;
-            padding: 20px;
+            border: 1px solid #263848;
+            padding: 24px;
             margin-bottom: 20px;
         }
 
         .section-title {
-            color: #c4a64a;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #5c7a5c;
+            color: #f1f5f9;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #263848;
         }
 
         .comparativo-container {
@@ -746,81 +828,81 @@
 
         .comparativo-barra {
             display: flex;
-            height: 50px;
+            height: 48px;
             border-radius: 10px;
             overflow: hidden;
-            border: 2px solid #5c7a5c;
+            border: 1px solid #263848;
         }
 
         .barra-organico {
-            background: linear-gradient(180deg, #4caf50 0%, #388e3c 100%);
+            background: linear-gradient(180deg, #10b981 0%, #059669 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             transition: width 0.5s ease;
             min-width: 80px;
         }
 
         .barra-trafego {
-            background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+            background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             transition: width 0.5s ease;
             min-width: 80px;
         }
 
         .barra-label, .barra-valor {
             color: white;
-            font-weight: bold;
-            font-size: 0.9rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            font-weight: 600;
+            font-size: 0.85rem;
         }
 
         .comparativo-detalhes {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+            gap: 16px;
         }
 
         .detalhe-card {
-            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
+            background: #162233;
             border-radius: 10px;
-            padding: 15px;
-            border: 2px solid #5c7a5c;
+            padding: 16px;
+            border: 1px solid #263848;
         }
 
         .detalhe-card.organico {
-            border-left: 4px solid #4caf50;
+            border-left: 3px solid #10b981;
         }
 
         .detalhe-card.trafego-pago {
-            border-left: 4px solid #ff9800;
+            border-left: 3px solid #f97316;
         }
 
         .detalhe-card h4 {
-            color: #c4a64a;
-            margin-bottom: 10px;
-            font-size: 1rem;
+            color: #f1f5f9;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
         }
 
         .detalhe-info p {
-            color: #e8e8e8;
-            margin: 5px 0;
+            color: #cbd5e1;
+            margin: 6px 0;
             font-size: 0.9rem;
         }
 
         .detalhe-info span {
-            color: #c4a64a;
-            font-weight: bold;
+            color: #f59e0b;
+            font-weight: 600;
         }
 
         .leads-por-dia-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             max-height: 400px;
             overflow-y: auto;
         }
@@ -829,16 +911,17 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 12px 15px;
-            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
+            padding: 12px 16px;
+            background: #162233;
             border-radius: 8px;
-            border: 1px solid #5c7a5c;
+            border: 1px solid #263848;
         }
 
         .dia-data {
-            color: #c4a64a;
-            font-weight: bold;
+            color: #f59e0b;
+            font-weight: 600;
             min-width: 100px;
+            font-size: 0.9rem;
         }
 
         .dia-barras {
@@ -847,11 +930,11 @@
             height: 24px;
             border-radius: 4px;
             overflow: hidden;
-            background: #1a2e1a;
+            background: #0f1923;
         }
 
         .dia-barra-organico {
-            background: linear-gradient(180deg, #4caf50 0%, #388e3c 100%);
+            background: linear-gradient(180deg, #10b981 0%, #059669 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -859,7 +942,7 @@
         }
 
         .dia-barra-trafego {
-            background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+            background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -869,14 +952,15 @@
         .dia-barra-organico span, .dia-barra-trafego span {
             color: white;
             font-size: 0.75rem;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .dia-total {
-            color: #e8e8e8;
-            font-weight: bold;
+            color: #f1f5f9;
+            font-weight: 600;
             min-width: 60px;
             text-align: right;
+            font-size: 0.9rem;
         }
 
         .tabela-metricas-container {
@@ -886,57 +970,61 @@
         .tabela-metricas {
             width: 100%;
             border-collapse: collapse;
-            background: #1a2e1a;
+            background: #0f1923;
             border-radius: 8px;
             overflow: hidden;
         }
 
         .tabela-metricas th {
-            background: linear-gradient(180deg, #3d5a3d 0%, #2a4a2a 100%);
-            color: #c4a64a;
-            padding: 12px 15px;
+            background: #1a2332;
+            color: #94a3b8;
+            padding: 12px 16px;
             text-align: left;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+            font-weight: 600;
         }
 
         .tabela-metricas td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #3d5a3d;
-            color: #e8e8e8;
+            padding: 12px 16px;
+            border-bottom: 1px solid #1e2d3d;
+            color: #f1f5f9;
+            font-size: 0.9rem;
         }
 
         .tabela-metricas tr:hover {
-            background: #2a4a2a;
+            background: #1a2332;
         }
 
         .tabela-metricas .valor-organico {
-            color: #4caf50;
+            color: #10b981;
+            font-weight: 600;
         }
 
         .tabela-metricas .valor-trafego {
-            color: #ff9800;
+            color: #f97316;
+            font-weight: 600;
         }
 
         /* Badge de origem na lista de vendas */
         .origem-badge {
             display: inline-block;
             padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: bold;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
             margin-left: 8px;
         }
 
         .origem-badge.organico {
-            background: linear-gradient(180deg, #4caf50 0%, #388e3c 100%);
-            color: white;
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
         }
 
         .origem-badge.trafego {
-            background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
-            color: white;
+            background: rgba(249, 115, 22, 0.15);
+            color: #f97316;
         }
 
         /* Registro de Leads */
@@ -945,90 +1033,93 @@
         }
 
         .form-leads {
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
 
         .leads-input-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 16px;
             align-items: flex-end;
         }
 
         .lead-input-card {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             flex: 1;
             min-width: 120px;
         }
 
         .lead-input-card label {
-            color: #c4a64a;
-            font-weight: bold;
-            font-size: 0.85rem;
+            color: #94a3b8;
+            font-weight: 500;
+            font-size: 0.8rem;
         }
 
         .lead-input-card input {
-            padding: 12px;
-            border: 2px solid #5c7a5c;
+            padding: 10px;
+            border: 1px solid #334155;
             border-radius: 8px;
-            background: #1a2e1a;
-            color: #e8e8e8;
-            font-size: 1.1rem;
+            background: #0f1923;
+            color: #f1f5f9;
+            font-size: 1rem;
             text-align: center;
         }
 
         .lead-input-card.organico input {
-            border-color: #4caf50;
+            border-color: #10b981;
         }
 
         .lead-input-card.trafego input {
-            border-color: #ff9800;
+            border-color: #f97316;
         }
 
         .lead-input-card input:focus {
             outline: none;
-            border-color: #c4a64a;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
         }
 
         .btn-add-leads {
-            padding: 12px 24px;
-            background: linear-gradient(180deg, #c4a64a 0%, #a08030 100%);
-            color: #1a2e1a;
+            padding: 10px 20px;
+            background: #3b82f6;
+            color: #ffffff;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 0.95rem;
+            font-weight: 600;
+            font-size: 0.9rem;
             white-space: nowrap;
+            transition: all 0.2s ease;
         }
 
         .btn-add-leads:hover {
-            background: linear-gradient(180deg, #d4b65a 0%, #b09040 100%);
+            background: #2563eb;
         }
 
         .leads-registrados-lista {
             max-height: 200px;
             overflow-y: auto;
-            margin-top: 15px;
+            margin-top: 16px;
         }
 
         .lead-registro-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px 15px;
-            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
+            padding: 10px 16px;
+            background: #162233;
             border-radius: 8px;
-            margin-bottom: 8px;
-            border: 1px solid #5c7a5c;
+            margin-bottom: 6px;
+            border: 1px solid #263848;
         }
 
         .lead-registro-data {
-            color: #c4a64a;
-            font-weight: bold;
+            color: #f59e0b;
+            font-weight: 600;
             min-width: 100px;
+            font-size: 0.9rem;
         }
 
         .lead-registro-valores {
@@ -1037,33 +1128,34 @@
         }
 
         .lead-registro-valores span {
-            color: #e8e8e8;
+            color: #f1f5f9;
         }
 
         .lead-registro-valores .organico {
-            color: #4caf50;
+            color: #10b981;
         }
 
         .lead-registro-valores .trafego {
-            color: #ff9800;
+            color: #f97316;
         }
 
         .lead-registro-total {
-            color: #c4a64a;
-            font-weight: bold;
+            color: #f59e0b;
+            font-weight: 600;
         }
 
         .btn-remove-lead {
-            background: #8b5a5a;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 4px 10px;
+            border-radius: 6px;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
 
         .btn-remove-lead:hover {
-            background: #a06a6a;
+            background: rgba(239, 68, 68, 0.2);
         }
 
         /* Cards de Conversão */
@@ -1072,99 +1164,103 @@
         }
 
         .conversao-stats .stat-card.conversao {
-            border-left: 4px solid #9c27b0;
+            border-left: 3px solid #a855f7;
         }
+        .conversao-stats .stat-card.conversao::before { background: #a855f7; }
 
         .conversao-detalhes-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
+            gap: 16px;
             margin-bottom: 20px;
         }
 
         .conversao-card {
-            background: linear-gradient(145deg, #2d4a2d 0%, #1a3a1a 100%);
+            background: #1e2d3d;
             border-radius: 12px;
-            border: 2px solid #5c7a5c;
-            padding: 20px;
+            border: 1px solid #263848;
+            padding: 24px;
             text-align: center;
         }
 
         .conversao-card.organico {
-            border-left: 4px solid #4caf50;
+            border-left: 3px solid #10b981;
         }
 
         .conversao-card.trafego {
-            border-left: 4px solid #ff9800;
+            border-left: 3px solid #f97316;
         }
 
         .conversao-card h4 {
-            color: #c4a64a;
-            margin-bottom: 10px;
-            font-size: 1rem;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
         }
 
         .conversao-numero {
             font-size: 2.5rem;
-            font-weight: bold;
-            color: #e8e8e8;
+            font-weight: 700;
+            color: #f1f5f9;
             margin-bottom: 10px;
         }
 
         .conversao-card.organico .conversao-numero {
-            color: #4caf50;
+            color: #10b981;
         }
 
         .conversao-card.trafego .conversao-numero {
-            color: #ff9800;
+            color: #f97316;
         }
 
         .conversao-card.cac {
-            border-left: 4px solid #e91e63;
+            border-left: 3px solid #ec4899;
         }
 
         .conversao-card.cac .conversao-numero {
-            color: #e91e63;
+            color: #ec4899;
             font-size: 2rem;
         }
 
         .cac-roi-info {
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid #5c7a5c;
-            color: #b8b8b8;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #263848;
+            color: #94a3b8;
             font-size: 0.9rem;
         }
 
         .cac-roi-info strong {
-            color: #4caf50;
+            color: #10b981;
         }
 
         /* Indicador de Período */
         .periodo-selecionado {
-            background: linear-gradient(145deg, #c4a64a 0%, #a08030 100%);
+            background: linear-gradient(135deg, #1e3a5f 0%, #1a2332 100%);
             padding: 12px 20px;
             border-radius: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            border: 1px solid #263848;
         }
 
         .periodo-label {
-            color: #1a2e1a;
-            font-weight: bold;
+            color: #94a3b8;
+            font-weight: 500;
             font-size: 0.9rem;
         }
 
         .periodo-valor {
-            color: #1a2e1a;
-            font-weight: bold;
-            font-size: 1.1rem;
-            background: rgba(255,255,255,0.3);
-            padding: 4px 12px;
+            color: #3b82f6;
+            font-weight: 700;
+            font-size: 1rem;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 4px 14px;
             border-radius: 6px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .conversao-info {
@@ -1172,34 +1268,33 @@
             justify-content: center;
             align-items: center;
             gap: 10px;
-            color: #b8b8b8;
+            color: #94a3b8;
             font-size: 0.9rem;
         }
 
         .conversao-info strong {
-            color: #e8e8e8;
+            color: #f1f5f9;
         }
 
         /* Edit Button */
         .btn-edit {
-            background: linear-gradient(180deg, #3498db 0%, #2980b9 100%);
-            color: white;
-            border: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 8px;
+            margin-right: 6px;
         }
 
         .btn-edit:hover {
-            background: linear-gradient(180deg, #4aa3e8 0%, #3a90c9 100%);
-            transform: scale(1.1);
+            background: rgba(59, 130, 246, 0.2);
         }
 
         .sale-actions {
@@ -1214,7 +1309,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1226,18 +1322,19 @@
         }
 
         .modal {
-            background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%);
-            padding: 30px;
-            border-radius: 15px;
-            border: 2px solid #5c7a5c;
-            max-width: 400px;
+            background: #1e2d3d;
+            padding: 28px;
+            border-radius: 16px;
+            border: 1px solid #334155;
+            max-width: 420px;
             width: 90%;
         }
 
         .modal h3 {
-            color: #c4a64a;
+            color: #f1f5f9;
             margin-bottom: 20px;
             text-align: center;
+            font-weight: 600;
         }
 
         .modal-buttons {
@@ -1248,124 +1345,41 @@
 
         .modal-buttons button {
             flex: 1;
-            padding: 12px;
+            padding: 10px;
             border: none;
             border-radius: 8px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
         }
 
         .btn-save {
-            background: linear-gradient(180deg, #27ae60 0%, #1e8449 100%);
+            background: #10b981;
             color: white;
         }
 
         .btn-save:hover {
-            background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
+            background: #059669;
         }
 
         .btn-cancel {
-            background: linear-gradient(180deg, #7f8c8d 0%, #5d6d6e 100%);
-            color: white;
+            background: #334155;
+            color: #94a3b8;
         }
 
         .btn-cancel:hover {
-            background: linear-gradient(180deg, #95a5a6 0%, #7f8c8d 100%);
-        }
-
-        /* Seção de Lembretes */
-        /* Projeção Mensal */
-        .projecao-section {
-            background: linear-gradient(145deg, #2d3a4a 0%, #1f2a3a 100%);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            border: 2px solid #3498db;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
-        }
-
-        .projecao-title {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #3498db;
-        }
-
-        .projecao-title h2 {
-            color: #3498db;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .projecao-filtro {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .projecao-filtro select {
-            padding: 8px 15px;
-            border: 2px solid #3498db;
-            border-radius: 8px;
-            background: #1a2e3a;
-            color: #e8e8e8;
-            font-size: 0.9rem;
-            cursor: pointer;
-        }
-
-        .projecao-filtro select:focus {
-            outline: none;
-            border-color: #5dade2;
-        }
-
-        .projecao-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px;
-            background: linear-gradient(90deg, #1f2a3a 0%, #162030 100%);
-            border-radius: 10px;
-            border-left: 4px solid #3498db;
-        }
-
-        .projecao-info h3 {
-            color: #5dade2;
-            font-size: 1rem;
-            margin-bottom: 5px;
-        }
-
-        .projecao-info p {
-            color: #85c1e9;
-            font-size: 0.85rem;
-        }
-
-        .projecao-valor {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #3498db;
-            text-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
-        }
-
-        .projecao-detalhe {
-            font-size: 0.8rem;
-            color: #85c1e9;
-            margin-top: 5px;
+            background: #475569;
+            color: #f1f5f9;
         }
 
         .lembretes-section {
-            background: linear-gradient(145deg, #4a3d2d 0%, #3d3020 100%);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            border: 2px solid #c4a64a;
-            box-shadow: 0 4px 15px rgba(196, 166, 74, 0.2);
+            background: #1e2d3d;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            border: 1px solid #263848;
+            border-left: 3px solid #f59e0b;
         }
 
         .lembretes-section.hidden {
@@ -1376,25 +1390,24 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #8b7355;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #263848;
         }
 
         .lembretes-title h2 {
-            color: #f5d742;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: #f1f5f9;
+            font-size: 1rem;
+            font-weight: 600;
         }
 
         .lembretes-badge {
-            background: #e74c3c;
+            background: #ef4444;
             color: white;
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: bold;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
             animation: pulse 2s infinite;
         }
 
@@ -1407,11 +1420,11 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 15px;
-            background: linear-gradient(90deg, #3d3020 0%, #2d2518 100%);
+            padding: 14px 16px;
+            background: #162233;
             border-radius: 8px;
-            margin-bottom: 8px;
-            border-left: 4px solid #f5d742;
+            margin-bottom: 6px;
+            border-left: 3px solid #f59e0b;
         }
 
         .lembrete-info {
@@ -1419,28 +1432,28 @@
         }
 
         .lembrete-nome {
-            font-weight: bold;
-            color: #f5d742;
-            font-size: 1rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            font-size: 0.95rem;
             margin-bottom: 3px;
         }
 
         .lembrete-detalhes {
-            color: #c4a64a;
+            color: #94a3b8;
             font-size: 0.85rem;
         }
 
         .lembrete-dias {
-            color: #e74c3c;
+            color: #ef4444;
             font-size: 0.8rem;
             margin-top: 3px;
         }
 
         .lembrete-valor {
             font-size: 1.1rem;
-            font-weight: bold;
-            color: #f5d742;
-            margin-right: 15px;
+            font-weight: 700;
+            color: #f59e0b;
+            margin-right: 16px;
         }
 
         .lembrete-actions {
@@ -1449,91 +1462,89 @@
         }
 
         .btn-renovar {
-            background: linear-gradient(180deg, #27ae60 0%, #1e8449 100%);
-            color: white;
-            border: none;
-            padding: 8px 15px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 7px 14px;
             border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
         }
 
         .btn-renovar:hover {
-            background: linear-gradient(180deg, #2ecc71 0%, #27ae60 100%);
-            transform: scale(1.05);
+            background: rgba(16, 185, 129, 0.2);
         }
 
         .btn-cancelar-recorrencia {
-            background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
-            border: none;
-            padding: 8px 15px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 7px 14px;
             border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
         }
 
         .btn-cancelar-recorrencia:hover {
-            background: linear-gradient(180deg, #ec7063 0%, #e74c3c 100%);
-            transform: scale(1.05);
+            background: rgba(239, 68, 68, 0.2);
         }
 
         .sale-info { flex: 1; }
-        .sale-name { font-weight: bold; color: #e8e8e8; font-size: 1rem; margin-bottom: 3px; }
-        .sale-plan { color: #c4a64a; font-size: 0.85rem; margin-bottom: 2px; font-weight: 500; }
-        .sale-date { color: #7a9a7a; font-size: 0.8rem; }
-        .sale-value { font-size: 1.2rem; font-weight: bold; color: #c4a64a; margin-right: 15px; }
-        .sale-value.negative { color: #e74c3c; }
+        .sale-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 3px; }
+        .sale-plan { color: #94a3b8; font-size: 0.85rem; margin-bottom: 2px; font-weight: 500; }
+        .sale-date { color: #64748b; font-size: 0.8rem; }
+        .sale-value { font-size: 1.2rem; font-weight: 700; color: #f59e0b; margin-right: 16px; }
+        .sale-value.negative { color: #ef4444; }
 
         .btn-remove {
-            background: linear-gradient(180deg, #8b4545 0%, #6b3535 100%);
-            color: #f0e6d3;
-            border: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .btn-remove:hover {
-            background: linear-gradient(180deg, #a55555 0%, #854545 100%);
-            transform: scale(1.1);
+            background: rgba(239, 68, 68, 0.2);
         }
 
         .empty-state {
             text-align: center;
             padding: 40px 20px;
-            color: #6b8b6b;
+            color: #475569;
         }
 
-        .empty-state .icon { font-size: 2.5rem; margin-bottom: 12px; }
-        .empty-state p { font-size: 1rem; }
+        .empty-state .icon { font-size: 2rem; margin-bottom: 12px; opacity: 0.6; }
+        .empty-state p { font-size: 0.95rem; }
 
         /* Toast notifications */
         .toast {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 8px;
+            bottom: 24px;
+            right: 24px;
+            padding: 14px 24px;
+            border-radius: 10px;
             color: white;
-            font-weight: bold;
+            font-weight: 600;
             z-index: 1001;
             animation: slideIn 0.3s ease;
-            max-width: 300px;
+            max-width: 320px;
+            font-size: 0.9rem;
         }
 
-        .toast.success { background: #27ae60; }
-        .toast.error { background: #e74c3c; }
+        .toast.success { background: #10b981; }
+        .toast.error { background: #ef4444; }
         .toast.hidden { display: none; }
 
         @keyframes slideIn {
@@ -1544,13 +1555,11 @@
         /* Footer */
         .footer {
             text-align: center;
-            padding: 15px;
-            margin-top: 25px;
-            color: #5c7a5c;
-            font-size: 0.85rem;
+            padding: 20px;
+            margin-top: 24px;
+            color: #475569;
+            font-size: 0.8rem;
         }
-
-        .footer .stars { color: #c4a64a; margin-bottom: 8px; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
@@ -1558,13 +1567,23 @@
         }
 
         /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 600px) {
-            .header h1 { font-size: 1.5rem; }
-            .header::before, .header::after { display: none; }
-            .stat-card .value { font-size: 1.2rem; }
+            .container { padding: 16px; }
+            .header h1 { font-size: 1.4rem; }
+            .stats-container { grid-template-columns: 1fr; }
+            .stat-card.lucro-card { grid-column: span 1; }
+            .stat-card .value { font-size: 1.6rem; }
             .sale-item { flex-wrap: wrap; gap: 8px; }
             .sale-value { margin-right: 0; }
             .tabs-container { flex-direction: column; }
+            .lembrete-item { flex-wrap: wrap; gap: 10px; }
+            .lembrete-valor { margin-right: 0; }
         }
     </style>
 </head>
@@ -1611,7 +1630,6 @@
     <header class="header">
         <h1>Cabo Pereira <span class="status-badge status-online" id="statusBadge">Online</span></h1>
         <p class="subtitle">Sistema de Controle de Vendas</p>
-        <div class="rank-badge">★★ OPERAÇÃO VENDAS ★★</div>
     </header>
 
     <div class="container">
@@ -1630,6 +1648,46 @@
 
         <!-- Tab Vendas -->
         <div id="tab-vendas" class="tab-content active">
+            <!-- Filtro de Período -->
+            <div class="filtro-data-vendas">
+                <div class="filtro-data-rapidos">
+                    <button class="btn-filtro-data active" data-filtro="todos" onclick="filtrarPorData('todos')">Todos</button>
+                    <button class="btn-filtro-data" data-filtro="hoje" onclick="filtrarPorData('hoje')">Hoje</button>
+                    <button class="btn-filtro-data" data-filtro="ontem" onclick="filtrarPorData('ontem')">Ontem</button>
+                    <button class="btn-filtro-data" data-filtro="7dias" onclick="filtrarPorData('7dias')">Últimos 7 dias</button>
+                    <button class="btn-filtro-data" data-filtro="mes" onclick="filtrarPorData('mes')">Este mês</button>
+                    <select id="filtroMesVendas" onchange="filtrarPorMesEspecifico()" style="padding: 7px 14px; border: 1px solid #263848; border-radius: 20px; background: #1a2332; color: #94a3b8; font-size: 0.8rem; cursor: pointer;">
+                        <option value="">Selecionar mês</option>
+                        <option value="2026-01">Janeiro 2026</option>
+                        <option value="2026-02">Fevereiro 2026</option>
+                        <option value="2026-03">Março 2026</option>
+                        <option value="2026-04">Abril 2026</option>
+                        <option value="2026-05">Maio 2026</option>
+                        <option value="2026-06">Junho 2026</option>
+                        <option value="2026-07">Julho 2026</option>
+                        <option value="2026-08">Agosto 2026</option>
+                        <option value="2026-09">Setembro 2026</option>
+                        <option value="2026-10">Outubro 2026</option>
+                        <option value="2026-11">Novembro 2026</option>
+                        <option value="2026-12">Dezembro 2026</option>
+                    </select>
+                    <button class="btn-filtro-data" data-filtro="personalizado" onclick="toggleCalendario()">📅 Personalizado</button>
+                </div>
+                <div class="filtro-data-calendario" id="filtroCalendario" style="display: none;">
+                    <div class="calendario-inputs">
+                        <div class="calendario-campo">
+                            <label>De:</label>
+                            <input type="date" id="dataInicio" onchange="filtrarPorDataPersonalizada()">
+                        </div>
+                        <div class="calendario-campo">
+                            <label>Até:</label>
+                            <input type="date" id="dataFim" onchange="filtrarPorDataPersonalizada()">
+                        </div>
+                        <button class="btn-limpar-data" onclick="limparFiltroData()">Limpar datas</button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Stats Cards -->
             <div class="stats-container">
                 <div class="stat-card">
@@ -1638,7 +1696,7 @@
                     <div class="label">Total Vendas</div>
                 </div>
                 <div class="stat-card">
-                    <div class="icon">🎖️</div>
+                    <div class="icon">👥</div>
                     <div class="value" id="qtdVendas">0</div>
                     <div class="label">Alunos</div>
                 </div>
@@ -1647,10 +1705,40 @@
                     <div class="value" id="mediaVendas">R$ 0,00</div>
                     <div class="label">Média/Venda</div>
                 </div>
-                <div class="stat-card positive">
-                    <div class="icon">📈</div>
-                    <div class="value" id="lucroLiquido">R$ 0,00</div>
-                    <div class="label">Lucro Líquido</div>
+                <div class="stat-card lucro-card">
+                    <div class="projecao-select-inline">
+                        <select id="filtroMesProjecao" onchange="atualizarProjecao()">
+                            <option value="2026-01" selected>Jan 2026</option>
+                            <option value="2026-02">Fev 2026</option>
+                            <option value="2026-03">Mar 2026</option>
+                            <option value="2026-04">Abr 2026</option>
+                            <option value="2026-05">Mai 2026</option>
+                            <option value="2026-06">Jun 2026</option>
+                            <option value="2026-07">Jul 2026</option>
+                            <option value="2026-08">Ago 2026</option>
+                            <option value="2026-09">Set 2026</option>
+                            <option value="2026-10">Out 2026</option>
+                            <option value="2026-11">Nov 2026</option>
+                            <option value="2026-12">Dez 2026</option>
+                        </select>
+                    </div>
+                    <div class="lucro-resumo">
+                        <div class="lucro-linha">
+                            <span class="lucro-label">Vendas</span>
+                            <span class="lucro-valor vendas" id="lucroVendasVal">R$ 0,00</span>
+                        </div>
+                        <div class="lucro-linha">
+                            <span class="lucro-label">Projeção recorrentes</span>
+                            <span class="lucro-valor projecao" id="projecaoValor">R$ 0,00</span>
+                        </div>
+                        <div class="lucro-divider"></div>
+                        <div class="lucro-linha total">
+                            <span class="lucro-label">Lucro Líquido</span>
+                            <span class="lucro-valor total-val" id="lucroLiquido">R$ 0,00</span>
+                        </div>
+                    </div>
+                    <div class="label">Faturamento <span id="projecaoMesNome">Janeiro 2026</span></div>
+                    <div class="projecao-detalhe-inline" id="projecaoDetalhe"></div>
                 </div>
             </div>
 
@@ -1673,37 +1761,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Projeção Mensal -->
-            <section class="projecao-section" id="projecaoSection">
-                <div class="projecao-title">
-                    <h2>📅 Projeção Mensal</h2>
-                    <div class="projecao-filtro">
-                        <select id="filtroMesProjecao" onchange="atualizarProjecao()">
-                            <option value="2026-01" selected>Janeiro 2026</option>
-                            <option value="2026-02">Fevereiro 2026</option>
-                            <option value="2026-03">Março 2026</option>
-                            <option value="2026-04">Abril 2026</option>
-                            <option value="2026-05">Maio 2026</option>
-                            <option value="2026-06">Junho 2026</option>
-                            <option value="2026-07">Julho 2026</option>
-                            <option value="2026-08">Agosto 2026</option>
-                            <option value="2026-09">Setembro 2026</option>
-                            <option value="2026-10">Outubro 2026</option>
-                            <option value="2026-11">Novembro 2026</option>
-                            <option value="2026-12">Dezembro 2026</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="projecao-card">
-                    <div class="projecao-info">
-                        <h3 id="projecaoMesNome">Janeiro 2026</h3>
-                        <p>Valor previsto para entrar neste mês</p>
-                        <div class="projecao-detalhe" id="projecaoDetalhe"></div>
-                    </div>
-                    <div class="projecao-valor" id="projecaoValor">R$ 0,00</div>
-                </div>
-            </section>
 
             <!-- Lembretes de Renovação -->
             <section class="lembretes-section hidden" id="lembretesSection">
@@ -1772,45 +1829,6 @@
                     <input type="text" id="buscaNome" placeholder="🔍 Buscar por nome do cliente..." oninput="filtrarVendas()">
                     <button class="btn-clear-search" onclick="limparBusca()">Limpar</button>
                 </div>
-                <!-- Filtro de Data -->
-                <div class="filtro-data-vendas">
-                    <div class="filtro-data-rapidos">
-                        <button class="btn-filtro-data active" data-filtro="todos" onclick="filtrarPorData('todos')">Todos</button>
-                        <button class="btn-filtro-data" data-filtro="hoje" onclick="filtrarPorData('hoje')">Hoje</button>
-                        <button class="btn-filtro-data" data-filtro="ontem" onclick="filtrarPorData('ontem')">Ontem</button>
-                        <button class="btn-filtro-data" data-filtro="7dias" onclick="filtrarPorData('7dias')">Últimos 7 dias</button>
-                        <button class="btn-filtro-data" data-filtro="mes" onclick="filtrarPorData('mes')">Este mês</button>
-                        <select id="filtroMesVendas" onchange="filtrarPorMesEspecifico()" style="padding: 6px 12px; border: 2px solid #5c7a5c; border-radius: 8px; background: #1a2e1a; color: #e8e8e8; font-size: 0.8rem; cursor: pointer;">
-                            <option value="">Selecionar mês</option>
-                            <option value="2026-01">Janeiro 2026</option>
-                            <option value="2026-02">Fevereiro 2026</option>
-                            <option value="2026-03">Março 2026</option>
-                            <option value="2026-04">Abril 2026</option>
-                            <option value="2026-05">Maio 2026</option>
-                            <option value="2026-06">Junho 2026</option>
-                            <option value="2026-07">Julho 2026</option>
-                            <option value="2026-08">Agosto 2026</option>
-                            <option value="2026-09">Setembro 2026</option>
-                            <option value="2026-10">Outubro 2026</option>
-                            <option value="2026-11">Novembro 2026</option>
-                            <option value="2026-12">Dezembro 2026</option>
-                        </select>
-                        <button class="btn-filtro-data" data-filtro="personalizado" onclick="toggleCalendario()">📅 Personalizado</button>
-                    </div>
-                    <div class="filtro-data-calendario" id="filtroCalendario" style="display: none;">
-                        <div class="calendario-inputs">
-                            <div class="calendario-campo">
-                                <label>De:</label>
-                                <input type="date" id="dataInicio" onchange="filtrarPorDataPersonalizada()">
-                            </div>
-                            <div class="calendario-campo">
-                                <label>Até:</label>
-                                <input type="date" id="dataFim" onchange="filtrarPorDataPersonalizada()">
-                            </div>
-                            <button class="btn-limpar-data" onclick="limparFiltroData()">Limpar datas</button>
-                        </div>
-                    </div>
-                </div>
                 <div class="sales-list" id="salesList">
                     <div class="empty-state">
                         <div class="icon">🎯</div>
@@ -1823,9 +1841,9 @@
         <!-- Tab Tráfego -->
         <div id="tab-trafego" class="tab-content">
             <!-- Filtro de Mês -->
-            <div class="filtro-mes-trafego" style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px; background: linear-gradient(145deg, #3d5a3d 0%, #2a4a2a 100%); padding: 15px 20px; border-radius: 10px; border: 2px solid #5c7a5c;">
-                <label style="color: #c4a64a; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Filtrar por Mês:</label>
-                <select id="filtroMesTrafego" onchange="renderizarTrafego()" style="padding: 10px 15px; border: 2px solid #5c7a5c; border-radius: 8px; background: #1a2e1a; color: #e8e8e8; font-size: 0.95rem; cursor: pointer;">
+            <div class="filtro-mes-trafego" style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px; background: #1e2d3d; padding: 16px 20px; border-radius: 12px; border: 1px solid #263848;">
+                <label style="color: #94a3b8; font-weight: 500; font-size: 0.8rem; letter-spacing: 0.3px;">Filtrar por Mês:</label>
+                <select id="filtroMesTrafego" onchange="renderizarTrafego()" style="padding: 8px 14px; border: 1px solid #334155; border-radius: 8px; background: #0f1923; color: #f1f5f9; font-size: 0.9rem; cursor: pointer;">
                     <option value="">Todos os meses</option>
                     <option value="2026-01">Janeiro 2026</option>
                     <option value="2026-02">Fevereiro 2026</option>
@@ -2121,7 +2139,6 @@
         </div>
 
         <footer class="footer">
-            <div class="stars">★ ★ ★ ★ ★</div>
             <p>Sistema de Gestão - Cabo Pereira</p>
         </footer>
     </div>
@@ -2393,6 +2410,23 @@
             }
 
             document.getElementById('projecaoDetalhe').textContent = detalhes.length > 0 ? detalhes.join(' + ') : 'Nenhuma projeção para este mês';
+
+            // Atualizar lucro total (vendas + projeção)
+            atualizarLucroTotal();
+        }
+
+        function atualizarLucroTotal() {
+            const vendasFiltradas = getVendasFiltradas();
+            const trafegoFiltrado = getTrafegoFiltradoPorData();
+            const totalVendasVal = vendasFiltradas.reduce((acc, v) => acc + parseFloat(v.valor), 0);
+            const totalTrafegoVal = trafegoFiltrado.reduce((acc, t) => acc + parseFloat(t.valor), 0);
+            const lucroVendas = totalVendasVal - totalTrafegoVal;
+
+            const projecaoTexto = document.getElementById('projecaoValor').textContent;
+            const projecaoNum = valorParaNumero(projecaoTexto.replace('R$', '').trim());
+
+            document.getElementById('lucroVendasVal').textContent = formatarMoeda(lucroVendas);
+            document.getElementById('lucroLiquido').textContent = formatarMoeda(lucroVendas + projecaoNum);
         }
 
         // ============================================
@@ -2892,12 +2926,20 @@
             const totalTrafegoVal = trafegoFiltrado.reduce((acc, t) => acc + parseFloat(t.valor), 0);
             const qtdVendas = vendasFiltradas.length;
             const media = qtdVendas > 0 ? totalVendasVal / qtdVendas : 0;
-            const lucro = totalVendasVal - totalTrafegoVal;
+            const lucroVendas = totalVendasVal - totalTrafegoVal;
+
+            // Pegar valor da projeção atual
+            const projecaoEl = document.getElementById('projecaoValor');
+            const projecaoTexto = projecaoEl ? projecaoEl.textContent : 'R$ 0,00';
+            const projecaoNum = valorParaNumero(projecaoTexto.replace('R$', '').trim());
+
+            const lucroTotal = lucroVendas + projecaoNum;
 
             document.getElementById('totalVendas').textContent = formatarMoeda(totalVendasVal);
             document.getElementById('qtdVendas').textContent = qtdVendas;
             document.getElementById('mediaVendas').textContent = formatarMoeda(media);
-            document.getElementById('lucroLiquido').textContent = formatarMoeda(lucro);
+            document.getElementById('lucroVendasVal').textContent = formatarMoeda(lucroVendas);
+            document.getElementById('lucroLiquido').textContent = formatarMoeda(lucroTotal);
 
             const totalGeral = vendas.length;
             const temFiltro = filtroDataAtivo !== 'todos' || document.getElementById('buscaNome').value.trim();
